@@ -1,0 +1,51 @@
+name: "nestjs-course"
+
+services:
+  postgres:
+    image: postgres:18.4
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    networks:
+      - nestjs-course-network
+
+  pgadmin:
+    image: dpage/pgadmin4:9.16
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - nestjs-course-network
+
+  redis:
+    image: redis:8.8.0
+    ports:
+      - "${REDIS_PORT}:6379"
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis-data:/data
+    networks:
+      - nestjs-course-network
+
+networks:
+  nestjs-course-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  pgadmin-data:
+  redis-data:
