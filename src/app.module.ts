@@ -1,3 +1,4 @@
+import { RecoverPasswordModule } from "@/modules/recover-passwords/recover-password.module";
 import { ProductModule } from "@/modules/products/product.module";
 import { AppCacheModule } from "@/common/cache/app-cache.module";
 import { LoggerModule } from "@/common/logger/logger.module";
@@ -6,6 +7,7 @@ import { OrderModule } from "@/modules/orders/order.module";
 import { UserModule } from "@/modules/users/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { AuthGuard } from "@/common/guards/auth.guard";
+import { MailModule } from "@/common/mail/mail.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
@@ -23,9 +25,11 @@ import { Module } from "@nestjs/common";
     AppCacheModule,
     LoggerModule,
     AuthModule,
+    RecoverPasswordModule,
     UserModule,
     ProductModule,
     OrderModule,
+    MailModule,
   ],
   providers: [
     {

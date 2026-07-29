@@ -41,6 +41,20 @@ services:
     networks:
       - nestjs-course-network
 
+  rabbitmq:
+    image: rabbitmq:4.3.4-management
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT}:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    restart: unless-stopped
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - nestjs-course-network
+
 networks:
   nestjs-course-network:
     driver: bridge
@@ -49,3 +63,4 @@ volumes:
   postgres-data:
   pgadmin-data:
   redis-data:
+  rabbitmq-data:

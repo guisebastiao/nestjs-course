@@ -1,3 +1,4 @@
+import { RecoverPasswordEntity } from "@/modules/recover-passwords/entities/recover-password.entity";
 import { ProductEntity } from "@/modules/products/entities/product.entity";
 import { OrderEntity } from "@/modules/orders/entities/order.entity";
 import {
@@ -18,11 +19,16 @@ export class UserEntity {
   @Column({ name: "name", length: 100, nullable: false })
   name: string;
 
-  @Column({ name: "email", length: 255, nullable: false })
+  @Column({ name: "email", length: 255, nullable: false, unique: true })
   email: string;
 
   @Column({ name: "password", length: 255, nullable: false })
   password: string;
+
+  @OneToMany(() => RecoverPasswordEntity, (recoverPassword) => recoverPassword.user, {
+    cascade: true,
+  })
+  recoverPasswords: RecoverPasswordEntity[];
 
   @OneToMany(() => ProductEntity, (product) => product.user, {
     cascade: false,

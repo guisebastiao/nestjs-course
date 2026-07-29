@@ -2,6 +2,7 @@ import { Type } from "class-transformer";
 import {
   ArrayMinSize,
   IsArray,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -44,7 +45,7 @@ export class CreateProductDTO {
   @Min(1)
   price: number;
 
-  @IsNumber()
+  @IsInt()
   @Min(0)
   availableQuantity: number;
 
