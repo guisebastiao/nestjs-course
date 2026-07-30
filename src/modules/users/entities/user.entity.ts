@@ -1,4 +1,5 @@
 import { RecoverPasswordEntity } from "@/modules/recover-passwords/entities/recover-password.entity";
+import { RefreshEntity } from "@/modules/refreshes/entities/refresh.entity";
 import { ProductEntity } from "@/modules/products/entities/product.entity";
 import { OrderEntity } from "@/modules/orders/entities/order.entity";
 import {
@@ -29,6 +30,11 @@ export class UserEntity {
     cascade: true,
   })
   recoverPasswords: RecoverPasswordEntity[];
+
+  @OneToMany(() => ProductEntity, (refresh) => refresh.user, {
+    cascade: true,
+  })
+  refreshes: RefreshEntity[];
 
   @OneToMany(() => ProductEntity, (product) => product.user, {
     cascade: false,

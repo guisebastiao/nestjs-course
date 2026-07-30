@@ -1,9 +1,12 @@
 import { RecoverPasswordModule } from "@/modules/recover-passwords/recover-password.module";
+import { RefreshModule } from "@/modules/refreshes/refresh.module";
 import { ProductModule } from "@/modules/products/product.module";
 import { AppCacheModule } from "@/common/cache/app-cache.module";
+import { CookieModule } from "@/common/cookies/cookie.module";
 import { LoggerModule } from "@/common/logger/logger.module";
 import { DatabaseConfig } from "@/database/database.config";
 import { OrderModule } from "@/modules/orders/order.module";
+import { TokenModule } from "@/common/tokens/token.module";
 import { UserModule } from "@/modules/users/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { AuthGuard } from "@/common/guards/auth.guard";
@@ -30,6 +33,9 @@ import { Module } from "@nestjs/common";
     ProductModule,
     OrderModule,
     MailModule,
+    RefreshModule,
+    TokenModule,
+    CookieModule,
   ],
   providers: [
     {

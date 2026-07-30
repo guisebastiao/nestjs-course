@@ -1,15 +1,17 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { AccessTokenService } from "@/common/tokens/access-token.service";
 import { RequestWithUser } from "@/common/types/request-with-user";
 import { IS_PUBLIC_KEY } from "@/common/decorators/auth.decorator";
+import { CookieService } from "@/common/cookies/cookie.service";
 import { LoggerService } from "@/common/logger/logger.service";
-import { AuthService } from "@/modules/auth/auth.service";
+import { CookieName } from "@/common/types/cookie-names";
 import { Reflector } from "@nestjs/core";
-import { Request } from "express";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly authService: AuthService,
+    private readonly accessTokenService: AccessTokenService,
+    private readonly cookieService: CookieService,
     private readonly logger: LoggerService,
     private readonly reflector: Reflector,
   ) {}
@@ -25,9 +27,10 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<RequestWithUser>();
-    const token = this.extractTokenHeader(request);
 
-    if (!token) {
+    const accessToken = this.cookieService.get(request, CookieName.ACCESS_TOKEN);
+
+    if (!accessToken) {
       this.logger.warn({
         message: "Attempt to access without an authentication token.",
         path: request.originalUrl,
@@ -38,13 +41,8 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("Log in to continue.");
     }
 
-    request.user = await this.authService.validateToken(request, token);
+    request.user = await this.accessTokenService.validate(request, accessToken);
 
     return true;
-  }
-
-  private extractTokenHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(" ") ?? [];
-    return type === "Bearer" ? token : undefined;
   }
 }
