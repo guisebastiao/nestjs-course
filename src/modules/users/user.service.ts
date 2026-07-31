@@ -36,6 +36,17 @@ export class UserService {
 
     const newUser = await this.userRepository.save(userEntity);
 
+    this.logger.log({
+      message: "User created successfully.",
+      path: req.path,
+      class: UserService.name,
+      method: this.createUser.name,
+      data: {
+        userId: newUser.id,
+        email: newUser.email,
+      },
+    });
+
     return this.userMapper.toResponse(newUser);
   }
 
@@ -47,11 +58,29 @@ export class UserService {
     const userMapperUpdate = this.userMapper.update(user, dto);
     const updatedUser = await this.userRepository.save(userMapperUpdate);
 
+    this.logger.log({
+      message: "User updated successfully.",
+      class: UserService.name,
+      method: this.updateUser.name,
+      data: {
+        userId: updatedUser.id,
+      },
+    });
+
     return this.userMapper.toResponse(updatedUser);
   }
 
   async deleteUser(user: UserEntity): Promise<void> {
     await this.userRepository.delete(user);
+
+    this.logger.log({
+      message: "User deleted successfully.",
+      class: UserService.name,
+      method: this.deleteUser.name,
+      data: {
+        userId: user.id,
+      },
+    });
   }
 
   private sendLogger(

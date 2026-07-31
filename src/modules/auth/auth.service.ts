@@ -67,5 +67,12 @@ export class AuthService {
     }
 
     await this.refreshTokenService.revoke(req, refreshToken);
+
+    this.logger.log({
+      message: "User logged out successfully.",
+      class: AuthService.name,
+      method: this.logout.name,
+      path: req.path,
+    });
   }
 }

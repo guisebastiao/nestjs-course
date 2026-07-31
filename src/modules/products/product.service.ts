@@ -25,6 +25,16 @@ export class ProductService {
 
     const product = await this.productRepository.save(productEntity);
 
+    this.logger.log({
+      message: "Product created successfully.",
+      class: ProductService.name,
+      method: this.createProduct.name,
+      data: {
+        productId: product.id,
+        userId: user.id,
+      },
+    });
+
     return this.productMapper.toResponse(product);
   }
 
@@ -52,6 +62,17 @@ export class ProductService {
 
     const productMapperUpdate = this.productMapper.update(product, dto);
     const updatedProduct = await this.productRepository.save(productMapperUpdate);
+
+    this.logger.log({
+      message: "Product updated successfully.",
+      path: req.path,
+      class: ProductService.name,
+      method: this.updateProduct.name,
+      data: {
+        productId: updatedProduct.id,
+      },
+    });
+
     return this.productMapper.toResponse(updatedProduct);
   }
 
@@ -61,6 +82,16 @@ export class ProductService {
     this.ensureProductOwnership(user.id, req, product);
 
     await this.productRepository.delete(product);
+
+    this.logger.log({
+      message: "Product deleted successfully.",
+      path: req.path,
+      class: ProductService.name,
+      method: this.deleteProduct.name,
+      data: {
+        productId: product.id,
+      },
+    });
   }
 
   private ensureProductOwnership(userId: string, req: Request, product: ProductEntity): void {

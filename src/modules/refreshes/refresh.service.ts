@@ -19,6 +19,13 @@ export class RefreshService {
 
   async refresh(req: Request, accessToken?: string, refreshToken?: string): Promise<AuthDTO> {
     if (!accessToken || !refreshToken) {
+      this.logger.warn({
+        message: "Refresh attempt without necessary cookies.",
+        path: req.path,
+        class: RefreshService.name,
+        method: this.refresh.name,
+      });
+
       throw new UnauthorizedException("You are missing necessary cookies.");
     }
 
@@ -33,6 +40,16 @@ export class RefreshService {
     const isValid = await this.bcryptService.compare(refreshToken, oldRefreshToken.tokenHash);
 
     if (!isValid) {
+      this.logger.warn({
+        message: "Refresh failed: provided refresh token does not match the stored token hash.",
+        path: req.path,
+        class: RefreshService.name,
+        method: this.refresh.name,
+        data: {
+          userId: oldRefreshToken.userId,
+        },
+      });
+
       throw new UnauthorizedException("Is invalid refresh token.");
     }
 
@@ -41,12 +58,30 @@ export class RefreshService {
     const user = await this.userRepository.findById(sub);
 
     if (!user) {
+      this.logger.warn({
+        message: "Refresh failed: user referenced by access token was not found.",
+        path: req.path,
+        class: RefreshService.name,
+        method: this.refresh.name,
+        data: { userId: sub },
+      });
+
       throw new NotFoundException("User not found.");
     }
 
     const newRefreshToken = await this.refreshTokenService.create(user.id, oldRefreshToken);
 
     const newAccessToken = await this.accessTokenService.create(user.id);
+
+    this.logger.log({
+      message: "Tokens refreshed successfully.",
+      path: req.path,
+      class: RefreshService.name,
+      method: this.refresh.name,
+      data: {
+        userId: user.id,
+      },
+    });
 
     return new AuthDTO(newAccessToken, newRefreshToken);
   }

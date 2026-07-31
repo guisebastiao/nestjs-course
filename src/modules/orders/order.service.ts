@@ -93,6 +93,17 @@ export class OrderService {
 
     const newOrder = await this.OrderRepository.save(order);
 
+    this.logger.log({
+      message: "Order created successfully.",
+      path: req.path,
+      class: OrderService.name,
+      method: this.createOrder.name,
+      data: {
+        orderId: newOrder.id,
+        userId: user.id,
+      },
+    });
+
     return this.orderMapper.toResponse(newOrder);
   }
 

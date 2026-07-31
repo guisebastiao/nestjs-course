@@ -70,6 +70,14 @@ export class RefreshTokenService {
     }
 
     if (entity.revokedAt !== null) {
+      this.logger.warn({
+        message: "Refresh failed: refresh token is revoked.",
+        path: req.path,
+        class: RefreshTokenService.name,
+        method: this.validate.name,
+        data: { userId: payload.sub },
+      });
+
       throw new UnauthorizedException("Your session has ended. Please log in again to continue.");
     }
 
@@ -128,5 +136,13 @@ export class RefreshTokenService {
     refresh.revokedAt = new Date();
 
     await this.refreshTokenRepository.save(refresh);
+
+    this.logger.log({
+      message: "Refresh token revoked successfully.",
+      path: req.path,
+      class: RefreshTokenService.name,
+      method: this.revoke.name,
+      data: { sub },
+    });
   }
 }
