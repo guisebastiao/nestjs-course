@@ -39,6 +39,10 @@ export class UserService {
     return this.userMapper.toResponse(newUser);
   }
 
+  me(user: UserEntity): UserDTO {
+    return this.userMapper.toResponse(user);
+  }
+
   async updateUser(user: UserEntity, dto: UpdateUserDTO): Promise<UserDTO> {
     const userMapperUpdate = this.userMapper.update(user, dto);
     const updatedUser = await this.userRepository.save(userMapperUpdate);
