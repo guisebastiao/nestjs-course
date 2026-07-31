@@ -1,3 +1,4 @@
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { UserEntity } from "@/modules/users/entities/user.entity";
 import { UserRepository } from "@/modules/users/user.repository";
 import { LoggerService } from "@/common/logger/logger.service";
@@ -5,12 +6,6 @@ import { TokenPayload } from "@/common/tokens/token.payload";
 import { JwtService, TokenExpiredError } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { Request } from "express";
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from "@nestjs/common";
 
 @Injectable()
 export class AccessTokenService {
@@ -55,23 +50,9 @@ export class AccessTokenService {
   }
 
   async validate(req: Request, accessToken: string): Promise<UserEntity> {
-    let payload: TokenPayload;
-
-    try {
-      payload = this.jwtService.verify<TokenPayload>(accessToken, {
-        secret: this.configService.getOrThrow("ACCESS_TOKEN_SECRET"),
-      });
-    } catch (error) {
-      this.logger.warn({
-        message: "Authentication failed: access token has expired.",
-        path: req.path,
-        class: AccessTokenService.name,
-        method: this.validate.name,
-        error,
-      });
-
-      throw new UnauthorizedException("Your access has expired.");
-    }
+    const payload = this.jwtService.verify<TokenPayload>(accessToken, {
+      secret: this.configService.getOrThrow("ACCESS_TOKEN_SECRET"),
+    });
 
     if (payload.type !== "access") {
       throw new BadRequestException("Your access token is invalid.");

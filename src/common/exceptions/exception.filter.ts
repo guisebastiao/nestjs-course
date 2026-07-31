@@ -32,13 +32,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
         .json(ErrorResponse.of("VALIDATION_ERROR", exception.message, fieldErrors));
     }
 
-    const code = exception.name
+    const data = ErrorResponse.of(this.getCode(exception.name), exception.message);
+
+    return response.status(exception.getStatus()).json(data);
+  }
+
+  private getCode(exceptionName: string): string {
+    return exceptionName
       .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
       .toUpperCase()
       .replace("_EXCEPTION", "");
-
-    const data = ErrorResponse.of(code, exception.message);
-
-    response.status(exception.getStatus()).json(data);
   }
 }

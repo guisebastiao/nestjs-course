@@ -47,23 +47,9 @@ export class RefreshTokenService {
   }
 
   async validate(req: Request, refreshToken: string): Promise<RefreshEntity> {
-    let payload: TokenPayload;
-
-    try {
-      payload = this.jwtService.verify<TokenPayload>(refreshToken, {
-        secret: this.configService.getOrThrow("REFRESH_TOKEN_SECRET"),
-      });
-    } catch (error) {
-      this.logger.warn({
-        message: "Authentication failed: Refresh token has expired.",
-        path: req.path,
-        class: RefreshTokenService.name,
-        method: this.validate.name,
-        error,
-      });
-
-      throw new UnauthorizedException("Your session has expired.");
-    }
+    const payload = this.jwtService.verify<TokenPayload>(refreshToken, {
+      secret: this.configService.getOrThrow("REFRESH_TOKEN_SECRET"),
+    });
 
     if (payload.type !== "refresh") {
       throw new BadRequestException("Your session is invalid.");

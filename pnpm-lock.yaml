@@ -65,9 +65,6 @@ importers:
       handlebars:
         specifier: ^4.7.9
         version: 4.7.9
-      jsonwebtoken:
-        specifier: ^9.0.3
-        version: 9.0.3
       keyv:
         specifier: ^5.6.0
         version: 5.6.0

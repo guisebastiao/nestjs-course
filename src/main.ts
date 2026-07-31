@@ -1,4 +1,5 @@
 import { ClassValidatorException } from "@/common/exceptions/class-validator.exception";
+import { JwtExceptionFilter } from "@/common/exceptions/jwt-exception-filter";
 import { HttpExceptionFilter } from "@/common/exceptions/exception.filter";
 import { Transport } from "@nestjs/microservices";
 import { ValidationPipe } from "@nestjs/common";
@@ -14,6 +15,8 @@ async function bootstrap() {
   const PORT = cfg.get<number>("PORT") ?? 8000;
 
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new JwtExceptionFilter());
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
