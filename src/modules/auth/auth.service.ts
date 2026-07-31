@@ -44,7 +44,7 @@ export class AuthService {
       message: "User authenticated successfully.",
       class: AuthService.name,
       method: this.login.name,
-      path: req.originalUrl,
+      path: req.path,
       data: {
         userId: user.id,
         email: user.email,
@@ -52,5 +52,20 @@ export class AuthService {
     });
 
     return new AuthDTO(accessToken, refreshToken);
+  }
+
+  async logout(req: Request, refreshToken?: string): Promise<void> {
+    if (!refreshToken) {
+      this.logger.warn({
+        message: "Logout attempt without refresh token cookie.",
+        class: AuthService.name,
+        method: this.logout.name,
+        path: req.path,
+      });
+
+      throw new UnauthorizedException("You are missing necessary cookie.");
+    }
+
+    await this.refreshTokenService.revoke(req, refreshToken);
   }
 }

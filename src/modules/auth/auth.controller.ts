@@ -29,4 +29,15 @@ export class AuthController {
 
     return SuccessResponse.of();
   }
+
+  @Post("/logout")
+  @HttpCode(HttpStatus.OK)
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const refreshToken = this.cookieService.get(req, CookieName.REFRESH_TOKEN);
+    await this.authService.logout(req, refreshToken);
+
+    this.cookieService.clear(res, [CookieName.ACCESS_TOKEN, CookieName.REFRESH_TOKEN]);
+
+    return SuccessResponse.of();
+  }
 }

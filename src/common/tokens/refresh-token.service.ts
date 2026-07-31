@@ -42,6 +42,10 @@ export class RefreshTokenService {
     return refreshToken;
   }
 
+  getSubject(refreshToken: string): TokenPayload {
+    return this.jwtService.decode<TokenPayload>(refreshToken);
+  }
+
   async validate(req: Request, refreshToken: string): Promise<RefreshEntity> {
     let payload: TokenPayload;
 
@@ -101,6 +105,40 @@ export class RefreshTokenService {
       refresh.replacedById = oldRefreshId;
       refresh.revokedAt = new Date();
     }
+
+    await this.refreshTokenRepository.save(refresh);
+  }
+
+  async revoke(req: Request, refreshToken: string): Promise<void> {
+    const { sub, type } = this.getSubject(refreshToken);
+
+    if (type !== "refresh") {
+      this.logger.warn({
+        message: "Attempt to revoke a token that is not a refresh token.",
+        path: req.path,
+        class: RefreshTokenService.name,
+        method: this.revoke.name,
+        data: { sub },
+      });
+
+      throw new BadRequestException("Invalid token.");
+    }
+
+    const refresh = await this.refreshTokenRepository.findById(sub);
+
+    if (!refresh) {
+      this.logger.warn({
+        message: "Refresh token not found while attempting revocation.",
+        path: req.path,
+        class: RefreshTokenService.name,
+        method: this.revoke.name,
+        data: { sub },
+      });
+
+      throw new NotFoundException("Refresh token not found.");
+    }
+
+    refresh.revokedAt = new Date();
 
     await this.refreshTokenRepository.save(refresh);
   }
