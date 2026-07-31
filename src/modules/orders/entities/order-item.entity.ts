@@ -7,6 +7,12 @@ export class OrderItemEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid", name: "product_id", nullable: false })
+  productId: string;
+
+  @Column({ type: "uuid", name: "order_id", nullable: false })
+  orderId: string;
+
   @Column({ name: "quantity", nullable: false })
   quantity: number;
 
@@ -14,17 +20,13 @@ export class OrderItemEntity {
   unitPrice: number;
 
   @ManyToOne(() => OrderEntity, (order) => order.items, {
-    nullable: false,
     onDelete: "CASCADE",
-    onUpdate: "CASCADE",
   })
   @JoinColumn({ name: "order_id" })
   order: OrderEntity;
 
   @ManyToOne(() => ProductEntity, (product) => product.items, {
-    nullable: false,
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
+    onDelete: "RESTRICT",
   })
   @JoinColumn({ name: "product_id" })
   product: ProductEntity;

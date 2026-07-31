@@ -9,6 +9,7 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  Column,
 } from "typeorm";
 
 @Entity({ name: "orders" })
@@ -16,16 +17,17 @@ export class OrderEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid", name: "user_id", nullable: false })
+  userId: string;
+
   @ManyToOne(() => UserEntity, (user) => user.orders, {
-    nullable: false,
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
+    onDelete: "RESTRICT",
   })
   @JoinColumn({ name: "user_id" })
   user: UserEntity;
 
   @OneToMany(() => OrderItemEntity, (item) => item.order, {
-    cascade: ["insert", "update"],
+    cascade: true,
   })
   items: OrderItemEntity[];
 

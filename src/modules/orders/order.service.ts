@@ -27,15 +27,16 @@ export class OrderService {
     const products = await this.productRepository.findProductsByIds(productsIds);
 
     if (products.length !== productsIds.length) {
-      this.sendLogger(
-        "Order creation failed: one or more requested products were not found.",
-        req,
-        this.createOrder.name,
-        {
+      this.logger.warn({
+        message: "Order creation failed: one or more requested products were not found.",
+        path: req.path,
+        class: OrderService.name,
+        method: this.createOrder.name,
+        data: {
           requestedProductIds: productsIds,
           foundProducts: products.map((p) => p.id),
         },
-      );
+      });
 
       throw new NotFoundException("One or more products were not found.");
     }
@@ -46,29 +47,30 @@ export class OrderService {
       const product = productsMap.get(productId);
 
       if (!product) {
-        this.sendLogger(
-          "Order creation failed: product was not found in the loaded products collection.",
-          req,
-          this.createOrder.name,
-          {
-            productId,
-          },
-        );
+        this.logger.warn({
+          message:
+            "Order creation failed: product was not found in the loaded products collection.",
+          path: req.path,
+          class: OrderService.name,
+          method: this.createOrder.name,
+          data: { productId },
+        });
 
         throw new NotFoundException("Product not found.");
       }
 
       if (product.availableQuantity < quantity) {
-        this.sendLogger(
-          "Order creation failed: insufficient stock for requested product.",
-          req,
-          this.createOrder.name,
-          {
+        this.logger.warn({
+          message: "Order creation failed: insufficient stock for requested product.",
+          path: req.path,
+          class: OrderService.name,
+          method: this.createOrder.name,
+          data: {
             productId: product.id,
             requestedQuantity: quantity,
             availableQuantity: product.availableQuantity,
           },
-        );
+        });
 
         throw new ConflictException("One or more products do not have sufficient stock.");
       }
@@ -76,7 +78,7 @@ export class OrderService {
       product.availableQuantity -= quantity;
 
       const item = new OrderItemEntity();
-      item.product = product;
+      item.productId = product.id;
       item.quantity = quantity;
       item.unitPrice = product.price;
 
@@ -86,7 +88,7 @@ export class OrderService {
     await this.productRepository.saveAll(products);
 
     const order = new OrderEntity();
-    order.user = user;
+    order.userId = user.id;
     order.items = orderItems;
 
     const newOrder = await this.OrderRepository.save(order);
@@ -104,20 +106,5 @@ export class OrderService {
       orders: orders.map((order) => this.orderMapper.toResponse(order)),
       pagination: new Pagination(page, limit, total, Math.ceil(total / limit)),
     };
-  }
-
-  private sendLogger(
-    message: string,
-    req: Request,
-    method: string,
-    data?: Record<string, unknown>,
-  ): void {
-    this.logger.warn({
-      message,
-      path: req.path,
-      class: OrderService.name,
-      method,
-      data,
-    });
   }
 }

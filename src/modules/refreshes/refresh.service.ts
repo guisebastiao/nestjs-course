@@ -44,7 +44,7 @@ export class RefreshService {
       throw new NotFoundException("User not found.");
     }
 
-    const newRefreshToken = await this.refreshTokenService.create(user, oldRefreshToken);
+    const newRefreshToken = await this.refreshTokenService.create(user.id, oldRefreshToken.id);
 
     const newAccessToken = await this.accessTokenService.create(user.id);
 

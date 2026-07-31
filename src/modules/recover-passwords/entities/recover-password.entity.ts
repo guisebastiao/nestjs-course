@@ -15,6 +15,9 @@ export class RecoverPasswordEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid", name: "user_id", nullable: false })
+  userId: string;
+
   @Column({ name: "token", length: 255, nullable: false, unique: true })
   token: string;
 
@@ -25,8 +28,7 @@ export class RecoverPasswordEntity {
   usedAt: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.recoverPasswords, {
-    nullable: false,
-    cascade: ["insert", "update"],
+    onDelete: "CASCADE",
   })
   @JoinColumn({ name: "user_id" })
   user: UserEntity;

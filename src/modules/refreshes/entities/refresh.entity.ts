@@ -16,6 +16,12 @@ export class RefreshEntity {
   @PrimaryColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid", name: "user_id", nullable: false })
+  userId: string;
+
+  @Column({ type: "uuid", name: "replaced_by_id", nullable: true })
+  replacedById: string;
+
   @Column({ name: "token_hash", nullable: false, unique: true })
   tokenHash: string;
 
@@ -23,15 +29,13 @@ export class RefreshEntity {
   revokedAt: Date;
 
   @OneToOne(() => RefreshEntity, (refresh) => refresh.replacedBy, {
-    nullable: true,
-    cascade: ["insert", "update"],
+    onDelete: "SET NULL",
   })
   @JoinColumn({ name: "replaced_by_id" })
   replacedBy: RefreshEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.refreshes, {
-    nullable: false,
-    cascade: false,
+    onDelete: "CASCADE",
   })
   @JoinColumn({ name: "user_id" })
   user: UserEntity;

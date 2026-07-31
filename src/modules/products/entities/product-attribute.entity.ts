@@ -6,6 +6,9 @@ export class ProductAttributeEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid", name: "product_id", nullable: false })
+  productId: string;
+
   @Column({ name: "name", length: 100, nullable: false })
   name: string;
 

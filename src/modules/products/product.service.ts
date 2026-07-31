@@ -21,7 +21,7 @@ export class ProductService {
 
   async createProduct(user: UserEntity, dto: CreateProductDTO): Promise<ProductDTO> {
     const productEntity = this.productMapper.toEntity(dto);
-    productEntity.user = user;
+    productEntity.userId = user.id;
 
     const product = await this.productRepository.save(productEntity);
 
@@ -46,9 +46,9 @@ export class ProductService {
     productId: string,
     dto: UpdateProductDTO,
   ): Promise<ProductDTO> {
-    const product = await this.findProductById(productId, req, this.updateProduct.name);
+    const product = await this.findProductById(productId, req);
 
-    this.ensureProductOwnership(user.id, req, this.updateProduct.name, product);
+    this.ensureProductOwnership(user.id, req, product);
 
     const productMapperUpdate = this.productMapper.update(product, dto);
     const updatedProduct = await this.productRepository.save(productMapperUpdate);
@@ -56,60 +56,46 @@ export class ProductService {
   }
 
   async deleteProduct(req: Request, user: UserEntity, productId: string): Promise<void> {
-    const product = await this.findProductById(productId, req, this.deleteProduct.name);
+    const product = await this.findProductById(productId, req);
 
-    this.ensureProductOwnership(user.id, req, this.deleteProduct.name, product);
+    this.ensureProductOwnership(user.id, req, product);
 
     await this.productRepository.delete(product);
   }
 
-  private ensureProductOwnership(
-    userId: string,
-    req: Request,
-    method: string,
-    product: ProductEntity,
-  ): void {
+  private ensureProductOwnership(userId: string, req: Request, product: ProductEntity): void {
     if (userId !== product.user.id) {
-      this.sendLogger("User attempted to manipulate a product they do not own.", req, method, {
-        userId,
-        productId: product.id,
-        ownerId: product.user.id,
+      this.logger.warn({
+        message: "User attempted to manipulate a product they do not own.",
+        path: req.path,
+        class: ProductService.name,
+        method: this.ensureProductOwnership.name,
+        data: {
+          userId,
+          productId: product.id,
+          ownerId: product.user.id,
+        },
       });
 
       throw new ForbiddenException("You do not have permission to manipulate this product.");
     }
   }
 
-  private async findProductById(
-    productId: string,
-    req: Request,
-    method: string,
-  ): Promise<ProductEntity> {
+  private async findProductById(productId: string, req: Request): Promise<ProductEntity> {
     const product = await this.productRepository.findById(productId);
 
     if (!product) {
-      this.sendLogger("Requested product was not found.", req, method, {
-        productId,
+      this.logger.warn({
+        message: "Requested product was not found.",
+        class: ProductService.name,
+        method: this.findProductById.name,
+        path: req.path,
+        data: { productId },
       });
 
       throw new NotFoundException("Product not found");
     }
 
     return product;
-  }
-
-  private sendLogger(
-    message: string,
-    req: Request,
-    method: string,
-    data?: Record<string, unknown>,
-  ): void {
-    this.logger.warn({
-      message,
-      path: req.path,
-      class: ProductService.name,
-      method,
-      data,
-    });
   }
 }

@@ -6,11 +6,13 @@ export class ProductImageEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid", name: "product_id", nullable: false })
+  productId: string;
+
   @Column({ name: "url", length: 1000, nullable: false })
   url: string;
 
   @ManyToOne(() => ProductEntity, (product) => product.images, {
-    nullable: false,
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "product_id" })

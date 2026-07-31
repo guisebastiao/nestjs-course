@@ -19,6 +19,9 @@ export class ProductEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid", name: "user_id", nullable: false })
+  userId: string;
+
   @Column({ name: "name", length: 100, nullable: false })
   name: string;
 
@@ -34,8 +37,14 @@ export class ProductEntity {
   @Column({ name: "category", length: 100, nullable: false })
   category: string;
 
+  @ManyToOne(() => UserEntity, (user) => user.products, {
+    onDelete: "RESTRICT",
+  })
+  @JoinColumn({ name: "user_id" })
+  user: UserEntity;
+
   @OneToMany(() => ProductImageEntity, (productImageEntity) => productImageEntity.product, {
-    cascade: ["insert", "update"],
+    cascade: true,
   })
   images: ProductImageEntity[];
 
@@ -43,18 +52,14 @@ export class ProductEntity {
     () => ProductAttributeEntity,
     (productAttributeEntity) => productAttributeEntity.product,
     {
-      cascade: ["insert", "update"],
+      cascade: true,
     },
   )
   attributes: ProductAttributeEntity[];
 
-  @ManyToOne(() => UserEntity, (user) => user.products, {
-    nullable: false,
+  @OneToMany(() => OrderItemEntity, (item) => item.product, {
+    cascade: true,
   })
-  @JoinColumn({ name: "user_id" })
-  user: UserEntity;
-
-  @OneToMany(() => OrderItemEntity, (item) => item.product)
   items: OrderItemEntity[];
 
   @CreateDateColumn({ name: "created_at" })

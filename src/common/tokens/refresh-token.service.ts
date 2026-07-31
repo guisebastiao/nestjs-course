@@ -1,6 +1,5 @@
 import { RefreshEntity } from "@/modules/refreshes/entities/refresh.entity";
 import { RefreshRepository } from "@/modules/refreshes/refresh.repository";
-import { UserEntity } from "@/modules/users/entities/user.entity";
 import { BcryptService } from "@/common/bcrypt/bcrypt.service";
 import { LoggerService } from "@/common/logger/logger.service";
 import { TokenPayload } from "@/common/tokens/token.payload";
@@ -25,7 +24,7 @@ export class RefreshTokenService {
     private readonly logger: LoggerService,
   ) {}
 
-  async create(user: UserEntity, oldRefresh?: RefreshEntity): Promise<string> {
+  async create(userId: string, oldRefreshId?: string): Promise<string> {
     const refreshTokenId = randomUUID();
 
     const payload: Omit<TokenPayload, "exp" | "iat"> = {
@@ -38,7 +37,7 @@ export class RefreshTokenService {
       secret: this.configService.getOrThrow("REFRESH_TOKEN_SECRET"),
     });
 
-    await this.createRefresh(user, refreshTokenId, refreshToken, oldRefresh);
+    await this.createRefresh(userId, refreshTokenId, refreshToken, oldRefreshId);
 
     return refreshToken;
   }
@@ -88,18 +87,18 @@ export class RefreshTokenService {
   }
 
   private async createRefresh(
-    user: UserEntity,
+    userId: string,
     refreshTokenId: string,
     refreshToken: string,
-    oldRefresh?: RefreshEntity,
+    oldRefreshId?: string,
   ): Promise<void> {
     const refresh = new RefreshEntity();
     refresh.id = refreshTokenId;
     refresh.tokenHash = await this.bcryptService.hash(refreshToken);
-    refresh.user = user;
+    refresh.userId = userId;
 
-    if (oldRefresh) {
-      refresh.replacedBy = oldRefresh;
+    if (oldRefreshId) {
+      refresh.replacedById = oldRefreshId;
       refresh.revokedAt = new Date();
     }
 
