@@ -1,11 +1,20 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { UserRoleEntity } from "@/modules/user-roles/entities/user-role.entity";
 import { AccessTokenService } from "@/common/tokens/access-token.service";
+import { HAS_ROLES_KEY } from "@/common/decorators/has-roles.decorator";
+import { DefaultRoleName } from "@/common/types/default-role-names";
 import { RequestWithUser } from "@/common/types/request-with-user";
 import { IS_PUBLIC_KEY } from "@/common/decorators/auth.decorator";
 import { CookieService } from "@/common/cookies/cookie.service";
 import { LoggerService } from "@/common/logger/logger.service";
 import { CookieName } from "@/common/types/cookie-names";
 import { Reflector } from "@nestjs/core";
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,6 +30,11 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+
+    const roles = this.reflector.getAllAndOverride<DefaultRoleName[]>(HAS_ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]) ?? [DefaultRoleName.USER];
 
     if (isPublic) {
       return true;
@@ -41,7 +55,30 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("Log in to continue.");
     }
 
-    request.user = await this.accessTokenService.validate(request, accessToken);
+    const user = await this.accessTokenService.validate(request, accessToken);
+
+    const userRoles = user.roles.map((userRole: UserRoleEntity) => userRole.role.name);
+
+    const hasRole =
+      userRoles.includes(DefaultRoleName.ADMIN) || roles.some((role) => userRoles.includes(role));
+
+    if (!hasRole) {
+      this.logger.warn({
+        message: "User attempted to access a resource without the required role.",
+        path: request.originalUrl,
+        class: AuthGuard.name,
+        method: this.canActivate.name,
+        data: {
+          userId: user.id,
+          requiredRoles: roles,
+          userRoles,
+        },
+      });
+
+      throw new ForbiddenException("You do not have permission to access this resource.");
+    }
+
+    request.user = user;
 
     return true;
   }

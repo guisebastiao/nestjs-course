@@ -1,5 +1,6 @@
 import { RecoverPasswordEntity } from "@/modules/recover-passwords/entities/recover-password.entity";
 import { RefreshEntity } from "@/modules/refreshes/entities/refresh.entity";
+import { UserRoleEntity } from "@/modules/user-roles/entities/user-role.entity";
 import { ProductEntity } from "@/modules/products/entities/product.entity";
 import { OrderEntity } from "@/modules/orders/entities/order.entity";
 import {
@@ -25,6 +26,11 @@ export class UserEntity {
 
   @Column({ name: "password", length: 255, nullable: false })
   password: string;
+
+  @OneToMany(() => UserRoleEntity, (userRole) => userRole.user, {
+    cascade: true,
+  })
+  roles: UserRoleEntity[];
 
   @OneToMany(() => RecoverPasswordEntity, (recoverPassword) => recoverPassword.user, {
     cascade: true,

@@ -27,7 +27,16 @@ export class UserRepository {
       return cached;
     }
 
-    const user = await this.repository.findOneBy({ id });
+    const user = await this.repository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        roles: {
+          role: true,
+        },
+      },
+    });
 
     if (user) {
       await this.cache.set(key, user, 300_000);

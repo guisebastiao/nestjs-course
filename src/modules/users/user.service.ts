@@ -22,8 +22,12 @@ export class UserService {
     const user = await this.userRepository.findByEmail(dto.email);
 
     if (user) {
-      this.sendLogger("Requested product was already exists.", req, this.createUser.name, {
-        email: dto.email,
+      this.logger.warn({
+        message: "Requested user was already exists.",
+        path: req.path,
+        class: UserService.name,
+        method: this.createUser.name,
+        data: { email: dto.email },
       });
 
       throw new ConflictException("User already exists.");
@@ -80,21 +84,6 @@ export class UserService {
       data: {
         userId: user.id,
       },
-    });
-  }
-
-  private sendLogger(
-    message: string,
-    req: Request,
-    method: string,
-    data?: Record<string, unknown>,
-  ): void {
-    this.logger.warn({
-      message,
-      path: req.path,
-      class: UserService.name,
-      method,
-      data,
     });
   }
 }
