@@ -3,7 +3,7 @@ import { Catch, ExceptionFilter, ArgumentsHost, HttpStatus } from "@nestjs/commo
 import { ErrorResponse } from "@/common/dto/error-response";
 import { Response } from "express";
 
-@Catch()
+@Catch(TokenExpiredError, JsonWebTokenError, NotBeforeError)
 export class JwtExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();

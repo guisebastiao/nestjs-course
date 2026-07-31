@@ -24,7 +24,7 @@ export class RefreshTokenService {
     private readonly logger: LoggerService,
   ) {}
 
-  async create(userId: string, oldRefreshId?: string): Promise<string> {
+  async create(userId: string, oldRefresh?: RefreshEntity): Promise<string> {
     const refreshTokenId = randomUUID();
 
     const payload: Omit<TokenPayload, "exp" | "iat"> = {
@@ -37,7 +37,7 @@ export class RefreshTokenService {
       secret: this.configService.getOrThrow("REFRESH_TOKEN_SECRET"),
     });
 
-    await this.createRefresh(userId, refreshTokenId, refreshToken, oldRefreshId);
+    await this.createRefresh(userId, refreshTokenId, refreshToken, oldRefresh);
 
     return refreshToken;
   }
@@ -80,16 +80,17 @@ export class RefreshTokenService {
     userId: string,
     refreshTokenId: string,
     refreshToken: string,
-    oldRefreshId?: string,
+    oldRefresh?: RefreshEntity,
   ): Promise<void> {
     const refresh = new RefreshEntity();
     refresh.id = refreshTokenId;
     refresh.tokenHash = await this.bcryptService.hash(refreshToken);
     refresh.userId = userId;
 
-    if (oldRefreshId) {
-      refresh.replacedById = oldRefreshId;
-      refresh.revokedAt = new Date();
+    if (oldRefresh) {
+      refresh.replacedById = oldRefresh.id;
+      oldRefresh.revokedAt = new Date();
+      await this.refreshTokenRepository.save(oldRefresh);
     }
 
     await this.refreshTokenRepository.save(refresh);
