@@ -25,7 +25,7 @@ export class RefreshEntity {
   @Column({ name: "token_hash", nullable: false, unique: true })
   tokenHash: string;
 
-  @Column({ name: "revoked_at", nullable: true, type: "timestamp without time zone" })
+  @Column({ type: "timestamptz", name: "revoked_at", nullable: true })
   revokedAt: Date;
 
   @OneToOne(() => RefreshEntity, (refresh) => refresh.replacedBy, {

@@ -21,10 +21,10 @@ export class RecoverPasswordEntity {
   @Column({ name: "token", length: 255, nullable: false, unique: true })
   token: string;
 
-  @Column({ name: "expires_at", nullable: false })
+  @Column({ type: "timestamptz", name: "expires_at", nullable: false })
   expiresAt: Date;
 
-  @Column({ name: "used_at", nullable: true })
+  @Column({ type: "timestamptz", name: "used_at", nullable: true })
   usedAt: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.recoverPasswords, {
