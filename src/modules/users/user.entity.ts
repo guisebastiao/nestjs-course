@@ -1,7 +1,7 @@
-import { RecoverPasswordEntity } from "@/modules/recover-passwords/entities/recover-password.entity";
-import { RefreshEntity } from "@/modules/refreshes/entities/refresh.entity";
-import { UserRoleEntity } from "@/modules/user-roles/entities/user-role.entity";
-import { ProductEntity } from "@/modules/products/entities/product.entity";
+import { RecoverPasswordEntity } from "@/modules/recover-passwords/recover-password.entity";
+import { RefreshEntity } from "@/modules/refreshes/refresh.entity";
+import { UserRoleEntity } from "@/modules/user-roles/user-role.entity";
+import { ProductEntity } from "@/modules/products/product.entity";
 import { OrderEntity } from "@/modules/orders/entities/order.entity";
 import {
   Entity,

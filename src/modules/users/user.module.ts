@@ -1,4 +1,4 @@
-import { UserEntity } from "@/modules/users/entities/user.entity";
+import { UserEntity } from "@/modules/users/user.entity";
 import { UserController } from "@/modules/users/user.controller";
 import { UserRepository } from "@/modules/users/user.repository";
 import { BcryptModule } from "@/common/bcrypt/bcrypt.module";

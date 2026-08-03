@@ -1,15 +1,14 @@
-import { ProductAttributeEntity } from "@/modules/products/entities/product-attribute.entity";
-import { ProductImageEntity } from "@/modules/products/entities/product-image.entity";
-import { ProductEntity } from "@/modules/products/entities/product.entity";
+import { ProductEntity } from "@/modules/products/product.entity";
 import { ProductController } from "@/modules/products/product.controller";
 import { ProductRepository } from "@/modules/products/product.repository";
+import { CategoryModule } from "@/modules/categories/category.module";
 import { ProductService } from "@/modules/products/product.service";
 import { ProductMapper } from "@/modules/products/product.mapper";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Module } from "@nestjs/common";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductEntity, ProductImageEntity, ProductAttributeEntity])],
+  imports: [TypeOrmModule.forFeature([ProductEntity]), CategoryModule],
   controllers: [ProductController],
   providers: [ProductService, ProductRepository, ProductMapper],
   exports: [ProductRepository],

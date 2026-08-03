@@ -1,68 +1,56 @@
+import { IsProductVariantAttributes } from "@/common/decorators/is-product-attributes.decorator";
+import { UploadImageDTO } from "@/modules/product-image/dto/upload-product-image.dto";
+import type { ProductAttributes } from "@/common/types/product-attributes";
 import { Type } from "class-transformer";
 import {
+  ArrayMaxSize,
   ArrayMinSize,
+  ArrayUnique,
   IsArray,
-  IsInt,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
-  IsUrl,
+  IsUUID,
   MaxLength,
   Min,
   ValidateNested,
 } from "class-validator";
 
-export class CreateProductAttributeDTO {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
-  name: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(1000)
-  description: string;
-}
-
-export class CreateProductImageDTO {
-  @IsUrl()
-  @IsNotEmpty()
-  url: string;
-}
-
 export class CreateProductDTO {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
+  @MaxLength(1000)
   name: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(1000)
-  description: string;
+  @IsOptional()
+  @MaxLength(10000)
+  description?: string;
 
   @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
+  @IsNotEmpty()
   @Min(1)
   price: number;
 
-  @IsInt()
-  @Min(0)
-  availableQuantity: number;
-
   @IsString()
-  @MaxLength(100)
   @IsNotEmpty()
-  category: string;
+  @MaxLength(500)
+  brand: string;
 
-  @ValidateNested()
+  @IsProductVariantAttributes()
+  attributes: ProductAttributes[];
+
   @IsArray()
   @ArrayMinSize(1)
-  @Type(() => CreateProductAttributeDTO)
-  attributes: CreateProductAttributeDTO[];
+  @ArrayUnique()
+  @IsUUID(undefined, { each: true })
+  categories: string[];
 
-  @ValidateNested()
   @IsArray()
   @ArrayMinSize(1)
-  @Type(() => CreateProductImageDTO)
-  images: CreateProductImageDTO[];
+  @ArrayMaxSize(15)
+  @ValidateNested({ each: true })
+  @Type(() => UploadImageDTO)
+  images: UploadImageDTO[];
 }

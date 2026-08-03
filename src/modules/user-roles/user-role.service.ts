@@ -1,4 +1,4 @@
-import { UserRoleEntity } from "@/modules/user-roles/entities/user-role.entity";
+import { UserRoleEntity } from "@/modules/user-roles/user-role.entity";
 import { UserRoleRepository } from "@/modules/user-roles/user-role.repository";
 import { AssignRoleDTO } from "@/modules/user-roles/dto/assign-role.dto";
 import { RoleRepository } from "@/modules/roles/role.repository";

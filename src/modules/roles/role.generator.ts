@@ -1,5 +1,5 @@
 import { DefaultRoleName } from "@/common/types/default-role-names";
-import { RoleEntity } from "@/modules/roles/entities/role.entity";
+import { RoleEntity } from "@/modules/roles/role.entity";
 import { RoleRepository } from "@/modules/roles/role.repository";
 import { Injectable, OnModuleInit } from "@nestjs/common";
 

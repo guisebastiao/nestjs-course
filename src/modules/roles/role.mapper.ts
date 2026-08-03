@@ -1,6 +1,6 @@
 import { CreateRoleDTO } from "@/modules/roles/dto/create-role.dto";
 import { UpdateRoleDTO } from "@/modules/roles/dto/update-role.dto";
-import { RoleEntity } from "@/modules/roles/entities/role.entity";
+import { RoleEntity } from "@/modules/roles/role.entity";
 import { RoleDTO } from "@/modules/roles/dto/role.dto";
 import { Injectable } from "@nestjs/common";
 import { DeepPartial } from "typeorm";

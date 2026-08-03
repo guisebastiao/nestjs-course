@@ -1,4 +1,4 @@
-import { RoleEntity } from "@/modules/roles/entities/role.entity";
+import { RoleEntity } from "@/modules/roles/role.entity";
 import { DeepPartial, In, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Injectable } from "@nestjs/common";

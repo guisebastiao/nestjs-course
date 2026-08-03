@@ -1,8 +1,10 @@
+import { CacheService } from "@/common/cache/app-cache.service";
 import { CacheModule } from "@nestjs/cache-manager";
+import { Global, Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { createKeyv } from "@keyv/redis";
-import { Module } from "@nestjs/common";
 
+@Global()
 @Module({
   imports: [
     CacheModule.registerAsync({
@@ -13,5 +15,7 @@ import { Module } from "@nestjs/common";
       }),
     }),
   ],
+  providers: [CacheService],
+  exports: [CacheService],
 })
 export class AppCacheModule {}

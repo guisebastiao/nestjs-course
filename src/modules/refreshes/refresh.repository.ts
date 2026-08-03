@@ -1,4 +1,4 @@
-import { RefreshEntity } from "@/modules/refreshes/entities/refresh.entity";
+import { RefreshEntity } from "@/modules/refreshes/refresh.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeepPartial, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";

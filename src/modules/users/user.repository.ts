@@ -1,4 +1,4 @@
-import { UserEntity } from "@/modules/users/entities/user.entity";
+import { UserEntity } from "@/modules/users/user.entity";
 import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";

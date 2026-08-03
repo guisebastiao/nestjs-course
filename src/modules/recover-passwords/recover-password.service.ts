@@ -1,5 +1,5 @@
 import { CreateRecoverPasswordDTO } from "@/modules/recover-passwords/dto/create-recover-password.dto";
-import { RecoverPasswordEntity } from "@/modules/recover-passwords/entities/recover-password.entity";
+import { RecoverPasswordEntity } from "@/modules/recover-passwords/recover-password.entity";
 import { RecoverPasswordRepository } from "@/modules/recover-passwords/recover-password.repository";
 import { ConflictException, GoneException, Injectable, NotFoundException } from "@nestjs/common";
 import { ResetPasswordDTO } from "@/modules/recover-passwords/dto/reset-password.dto";

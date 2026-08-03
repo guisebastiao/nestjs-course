@@ -1,9 +1,9 @@
+import { ProductQueryParams } from "@/modules/products/dto/product-query-params.dto";
 import { CreateProductDTO } from "@/modules/products/dto/create-product.dto";
 import { UpdateProductDTO } from "@/modules/products/dto/update-product.dto";
 import { ProductService } from "@/modules/products/product.service";
 import { AuthUser } from "@/common/decorators/auth-user.decorator";
-import { UserEntity } from "@/modules/users/entities/user.entity";
-import { PaginationQuery } from "@/common/dto/pagination-query";
+import { UserEntity } from "@/modules/users/user.entity";
 import { SuccessResponse } from "@/common/dto/success-response";
 import { Public } from "@/common/decorators/auth.decorator";
 import { ListResponse } from "@/common/dto/list-response";
@@ -28,16 +28,28 @@ export class ProductController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async createProduct(@AuthUser() user: UserEntity, @Body() dto: CreateProductDTO) {
-    const data = await this.productService.createProduct(user, dto);
+  async createProduct(
+    @Req() req: Request,
+    @AuthUser() user: UserEntity,
+    @Body() dto: CreateProductDTO,
+  ) {
+    const data = await this.productService.createProduct(req, user, dto);
+    return SuccessResponse.of(data);
+  }
+
+  @Get("/:productId")
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  async findProduct(@Req() req: Request, @Param("productId") productId: string) {
+    const data = await this.productService.findProduct(productId, req);
     return SuccessResponse.of(data);
   }
 
   @Get()
   @Public()
   @HttpCode(HttpStatus.OK)
-  async listAllProducts(@Query() paginationQuery: PaginationQuery) {
-    const { products, pagination } = await this.productService.listAllProducts(paginationQuery);
+  async listAllProducts(@Query() params: ProductQueryParams) {
+    const { products, pagination } = await this.productService.listAllProducts(params);
     const data = ListResponse.of(products, pagination);
     return SuccessResponse.of(data);
   }

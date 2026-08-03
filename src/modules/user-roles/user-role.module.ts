@@ -1,4 +1,4 @@
-import { UserRoleEntity } from "@/modules/user-roles/entities/user-role.entity";
+import { UserRoleEntity } from "@/modules/user-roles/user-role.entity";
 import { UserRoleController } from "@/modules/user-roles/user-role.controller";
 import { UserRoleRepository } from "@/modules/user-roles/user-role.repository";
 import { UserRoleService } from "@/modules/user-roles/user-role.service";

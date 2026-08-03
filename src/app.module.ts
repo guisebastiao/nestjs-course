@@ -1,8 +1,11 @@
+import { ProductCategoryModule } from "@/modules/product-categories/product-category.module";
 import { RecoverPasswordModule } from "@/modules/recover-passwords/recover-password.module";
 import { UserRoleModule } from "@/modules/user-roles/user-role.module";
+import { CategoryModule } from "@/modules/categories/category.module";
 import { RefreshModule } from "@/modules/refreshes/refresh.module";
 import { ProductModule } from "@/modules/products/product.module";
 import { AppCacheModule } from "@/common/cache/app-cache.module";
+import { StorageModule } from "@/common/storage/storage.module";
 import { CookieModule } from "@/common/cookies/cookie.module";
 import { LoggerModule } from "@/common/logger/logger.module";
 import { DatabaseConfig } from "@/database/database.config";
@@ -27,12 +30,15 @@ import { Module } from "@nestjs/common";
       useClass: DatabaseConfig,
       inject: [DatabaseConfig],
     }),
+    StorageModule,
     AppCacheModule,
     LoggerModule,
     AuthModule,
     RecoverPasswordModule,
     UserModule,
     ProductModule,
+    CategoryModule,
+    ProductCategoryModule,
     OrderModule,
     MailModule,
     RefreshModule,

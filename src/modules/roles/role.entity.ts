@@ -1,4 +1,4 @@
-import { UserRoleEntity } from "@/modules/user-roles/entities/user-role.entity";
+import { UserRoleEntity } from "@/modules/user-roles/user-role.entity";
 import {
   Column,
   CreateDateColumn,

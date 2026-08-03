@@ -1,5 +1,5 @@
 import { OrderItemEntity } from "@/modules/orders/entities/order-item.entity";
-import { UserEntity } from "@/modules/users/entities/user.entity";
+import { UserEntity } from "@/modules/users/user.entity";
 import {
   Entity,
   CreateDateColumn,

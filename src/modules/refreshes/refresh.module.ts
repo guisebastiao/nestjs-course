@@ -1,4 +1,4 @@
-import { RefreshEntity } from "@/modules/refreshes/entities/refresh.entity";
+import { RefreshEntity } from "@/modules/refreshes/refresh.entity";
 import { RefreshRepository } from "@/modules/refreshes/refresh.repository";
 import { RefreshController } from "@/modules/refreshes/refresh.controller";
 import { RefreshService } from "@/modules/refreshes/refresh.service";

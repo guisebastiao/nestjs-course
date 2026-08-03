@@ -1,4 +1,4 @@
-import { RecoverPasswordEntity } from "@/modules/recover-passwords/entities/recover-password.entity";
+import { RecoverPasswordEntity } from "@/modules/recover-passwords/recover-password.entity";
 import { RecoverPasswordController } from "@/modules/recover-passwords/recover-password.controller";
 import { RecoverPasswordRepository } from "@/modules/recover-passwords/recover-password.repository";
 import { RecoverPasswordService } from "@/modules/recover-passwords/recover-password.service";

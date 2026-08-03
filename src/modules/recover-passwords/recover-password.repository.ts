@@ -1,4 +1,4 @@
-import { RecoverPasswordEntity } from "@/modules/recover-passwords/entities/recover-password.entity";
+import { RecoverPasswordEntity } from "@/modules/recover-passwords/recover-password.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeepPartial, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";

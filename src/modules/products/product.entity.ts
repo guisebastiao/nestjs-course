@@ -1,7 +1,8 @@
-import { ProductAttributeEntity } from "@/modules/products/entities/product-attribute.entity";
-import { ProductImageEntity } from "@/modules/products/entities/product-image.entity";
+import { ProductCategoryEntity } from "@/modules/product-categories/product-category.entity";
+import { ProductImageEntity } from "@/modules/product-image/product-image.entity";
 import { OrderItemEntity } from "@/modules/orders/entities/order-item.entity";
-import { UserEntity } from "@/modules/users/entities/user.entity";
+import type { ProductAttributes } from "@/common/types/product-attributes";
+import { UserEntity } from "@/modules/users/user.entity";
 import {
   Entity,
   Column,
@@ -22,20 +23,23 @@ export class ProductEntity {
   @Column({ type: "uuid", name: "user_id", nullable: false })
   userId: string;
 
-  @Column({ name: "name", length: 100, nullable: false })
+  @Column({ name: "sku", nullable: false, length: 30, unique: true })
+  sku: string;
+
+  @Column({ name: "slug", length: 1200, nullable: false })
+  slug: string;
+
+  @Column({ name: "name", length: 1000, nullable: false })
   name: string;
+
+  @Column({ type: "text", name: "description", nullable: true })
+  description?: string;
 
   @Column({ name: "price", type: "decimal", precision: 10, scale: 2, nullable: false })
   price: number;
 
-  @Column({ name: "available_quantity", nullable: false })
-  availableQuantity: number;
-
-  @Column({ name: "description", length: 1000, nullable: false })
-  description: string;
-
-  @Column({ name: "category", length: 100, nullable: false })
-  category: string;
+  @Column({ name: "brand", length: 500, nullable: false })
+  brand: string;
 
   @ManyToOne(() => UserEntity, (user) => user.products, {
     onDelete: "RESTRICT",
@@ -45,17 +49,17 @@ export class ProductEntity {
 
   @OneToMany(() => ProductImageEntity, (productImageEntity) => productImageEntity.product, {
     cascade: true,
+    orphanedRowAction: "delete",
   })
   images: ProductImageEntity[];
 
-  @OneToMany(
-    () => ProductAttributeEntity,
-    (productAttributeEntity) => productAttributeEntity.product,
-    {
-      cascade: true,
-    },
-  )
-  attributes: ProductAttributeEntity[];
+  @Column({ name: "attributes", type: "json", nullable: true })
+  attributes?: ProductAttributes[];
+
+  @OneToMany(() => ProductCategoryEntity, (category) => category.product, {
+    cascade: true,
+  })
+  categories: ProductCategoryEntity[];
 
   @OneToMany(() => OrderItemEntity, (item) => item.product, {
     cascade: true,

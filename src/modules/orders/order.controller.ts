@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, Req } from "@nestjs/common";
 import { CreateOrderDTO } from "@/modules/orders/dto/create-order.dto";
 import { AuthUser } from "@/common/decorators/auth-user.decorator";
-import { UserEntity } from "@/modules/users/entities/user.entity";
+import { UserEntity } from "@/modules/users/user.entity";
 import { SuccessResponse } from "@/common/dto/success-response";
 import { PaginationQuery } from "@/common/dto/pagination-query";
 import { OrderService } from "@/modules/orders/order.service";

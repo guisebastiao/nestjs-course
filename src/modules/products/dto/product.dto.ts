@@ -1,19 +1,16 @@
-export class ProductAttributeDTO {
-  name: string;
-  description: string;
-}
-
-export class ProductImageDTO {
-  url: string;
-}
+import { ProductAttributes } from "@/common/types/product-attributes";
+import { ProductImageDTO } from "@/modules/product-image/dto/product-image.dto";
+import { CategoryDTO } from "@/modules/categories/dto/category.dto";
 
 export class ProductDTO {
   id: string;
+  sku: string;
+  slug: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
-  availableQuantity: number;
-  category: string;
-  attributes: ProductAttributeDTO[];
+  brand: string;
+  categories: CategoryDTO[];
+  attributes?: ProductAttributes[];
   images: ProductImageDTO[];
 }

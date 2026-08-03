@@ -1,4 +1,4 @@
-import { UserRoleEntity } from "@/modules/user-roles/entities/user-role.entity";
+import { UserRoleEntity } from "@/modules/user-roles/user-role.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeepPartial, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { UserEntity } from "@/modules/users/entities/user.entity";
+import { UserEntity } from "@/modules/users/user.entity";
 import { UserRepository } from "@/modules/users/user.repository";
 import { LoggerService } from "@/common/logger/logger.service";
 import { TokenPayload } from "@/common/tokens/token.payload";

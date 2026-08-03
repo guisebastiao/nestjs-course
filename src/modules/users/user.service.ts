@@ -1,6 +1,6 @@
 import { UpdateUserDTO } from "@/modules/users/dto/update-user.dto";
 import { CreateUserDTO } from "@/modules/users/dto/create-user.dto";
-import { UserEntity } from "@/modules/users/entities/user.entity";
+import { UserEntity } from "@/modules/users/user.entity";
 import { UserRepository } from "@/modules/users/user.repository";
 import { ConflictException, Injectable } from "@nestjs/common";
 import { BcryptService } from "@/common/bcrypt/bcrypt.service";

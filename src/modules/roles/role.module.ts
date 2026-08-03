@@ -1,5 +1,5 @@
-import { RoleGenerator } from "@/modules/roles/generators/role.generator";
-import { RoleEntity } from "@/modules/roles/entities/role.entity";
+import { RoleGenerator } from "@/modules/roles/role.generator";
+import { RoleEntity } from "@/modules/roles/role.entity";
 import { RoleRepository } from "@/modules/roles/role.repository";
 import { RoleController } from "@/modules/roles/role.controller";
 import { RoleService } from "@/modules/roles/role.service";

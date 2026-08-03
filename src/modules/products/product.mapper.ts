@@ -1,53 +1,56 @@
-import { ProductAttributeEntity } from "@/modules/products/entities/product-attribute.entity";
-import { ProductImageEntity } from "@/modules/products/entities/product-image.entity";
+import { ProductImageDTO } from "@/modules/product-image/dto/product-image.dto";
 import { CreateProductDTO } from "@/modules/products/dto/create-product.dto";
 import { UpdateProductDTO } from "@/modules/products/dto/update-product.dto";
-import { ProductEntity } from "@/modules/products/entities/product.entity";
+import { ProductEntity } from "@/modules/products/product.entity";
+import { CategoryDTO } from "@/modules/categories/dto/category.dto";
+import { StorageService } from "@/common/storage/storage.service";
 import { ProductDTO } from "@/modules/products/dto/product.dto";
 import { Injectable } from "@nestjs/common";
 import { DeepPartial } from "typeorm";
 
 @Injectable()
 export class ProductMapper {
+  constructor(private readonly storageService: StorageService) {}
+
   toResponse(entity: ProductEntity): ProductDTO {
     const productDTO = new ProductDTO();
     productDTO.id = entity.id;
+    productDTO.sku = entity.sku;
+    productDTO.slug = entity.slug;
     productDTO.name = entity.name;
     productDTO.description = entity.description;
     productDTO.price = entity.price;
-    productDTO.availableQuantity = entity.availableQuantity;
-    productDTO.category = entity.category;
-    productDTO.attributes = entity.attributes.map(({ name, description }) => ({
-      name,
-      description,
-    }));
-    productDTO.images = entity.images.map(({ url }) => ({ url }));
+    productDTO.brand = entity.brand;
+    productDTO.attributes = entity.attributes;
 
+    productDTO.categories = entity.categories.map(({ category }) => {
+      const dto = new CategoryDTO();
+      dto.id = category.id;
+      dto.slug = category.slug;
+      dto.name = category.name;
+      dto.description = category.description;
+      return dto;
+    });
+
+    productDTO.images = entity.images.map((image) => {
+      const dto = new ProductImageDTO();
+      dto.id = image.id;
+      dto.url = this.storageService.getUrl(image.path);
+      dto.position = image.position;
+      dto.altText = image.altText;
+      return dto;
+    });
     return productDTO;
   }
 
   toEntity(dto: CreateProductDTO): ProductEntity {
-    const productEntity = new ProductEntity();
-    productEntity.name = dto.name;
-    productEntity.description = dto.description;
-    productEntity.price = dto.price;
-    productEntity.availableQuantity = dto.availableQuantity;
-    productEntity.category = dto.category;
-
-    productEntity.attributes = dto.attributes.map(({ name, description }) => {
-      const attributeEntity = new ProductAttributeEntity();
-      attributeEntity.name = name;
-      attributeEntity.description = description;
-      return attributeEntity;
-    });
-
-    productEntity.images = dto.images.map(({ url }) => {
-      const imageEntity = new ProductImageEntity();
-      imageEntity.url = url;
-      return imageEntity;
-    });
-
-    return productEntity;
+    const entity = new ProductEntity();
+    entity.name = dto.name;
+    entity.description = dto.description;
+    entity.price = dto.price;
+    entity.brand = dto.brand;
+    entity.attributes = dto.attributes;
+    return entity;
   }
 
   update(entity: ProductEntity, newData: UpdateProductDTO): DeepPartial<ProductEntity> {

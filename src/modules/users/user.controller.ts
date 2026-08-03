@@ -1,7 +1,7 @@
 import { UpdateUserDTO } from "@/modules/users/dto/update-user.dto";
 import { CreateUserDTO } from "@/modules/users/dto/create-user.dto";
 import { AuthUser } from "@/common/decorators/auth-user.decorator";
-import { UserEntity } from "@/modules/users/entities/user.entity";
+import { UserEntity } from "@/modules/users/user.entity";
 import { SuccessResponse } from "@/common/dto/success-response";
 import { Public } from "@/common/decorators/auth.decorator";
 import { UserService } from "@/modules/users/user.service";
