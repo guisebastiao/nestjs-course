@@ -1,5 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { ProductEntity } from "@/modules/products/product.entity";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity("product_images")
 export class ProductImageEntity {
@@ -23,4 +31,10 @@ export class ProductImageEntity {
   })
   @JoinColumn({ name: "product_id" })
   product: ProductEntity;
+
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: string;
+
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt: string;
 }

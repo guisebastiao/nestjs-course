@@ -1,16 +1,18 @@
-import { ProductImageDTO } from "@/modules/product-image/dto/product-image.dto";
 import { CreateProductDTO } from "@/modules/products/dto/create-product.dto";
 import { UpdateProductDTO } from "@/modules/products/dto/update-product.dto";
+import { ProductImageMapper } from "@/common/mappers/product-image.mapper";
 import { ProductEntity } from "@/modules/products/product.entity";
-import { CategoryDTO } from "@/modules/categories/dto/category.dto";
-import { StorageService } from "@/common/storage/storage.service";
+import { CategoryMapper } from "@/common/mappers/category.mapper";
 import { ProductDTO } from "@/modules/products/dto/product.dto";
 import { Injectable } from "@nestjs/common";
 import { DeepPartial } from "typeorm";
 
 @Injectable()
 export class ProductMapper {
-  constructor(private readonly storageService: StorageService) {}
+  constructor(
+    private readonly productImageMapper: ProductImageMapper,
+    private readonly categoryMapper: CategoryMapper,
+  ) {}
 
   toResponse(entity: ProductEntity): ProductDTO {
     const productDTO = new ProductDTO();
@@ -24,22 +26,13 @@ export class ProductMapper {
     productDTO.attributes = entity.attributes;
 
     productDTO.categories = entity.categories.map(({ category }) => {
-      const dto = new CategoryDTO();
-      dto.id = category.id;
-      dto.slug = category.slug;
-      dto.name = category.name;
-      dto.description = category.description;
-      return dto;
+      return this.categoryMapper.toResponse(category);
     });
 
-    productDTO.images = entity.images.map((image) => {
-      const dto = new ProductImageDTO();
-      dto.id = image.id;
-      dto.url = this.storageService.getUrl(image.path);
-      dto.position = image.position;
-      dto.altText = image.altText;
-      return dto;
+    productDTO.images = entity.images.map((imageEntity) => {
+      return this.productImageMapper.toResponse(imageEntity);
     });
+
     return productDTO;
   }
 

@@ -5,7 +5,7 @@ import { RoleRepository } from "@/modules/roles/role.repository";
 import { UserRepository } from "@/modules/users/user.repository";
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { LoggerService } from "@/common/logger/logger.service";
-import { RoleMapper } from "@/modules/roles/role.mapper";
+import { RoleMapper } from "@/common/mappers/role.mapper";
 import { RoleDTO } from "@/modules/roles/dto/role.dto";
 import { Request } from "express";
 

@@ -7,7 +7,7 @@ import { OrderRepository } from "@/modules/orders/order.repository";
 import { UserEntity } from "@/modules/users/user.entity";
 import { PaginationQuery } from "@/common/dto/pagination-query";
 import { LoggerService } from "@/common/logger/logger.service";
-import { OrderMapper } from "@/modules/orders/order.mapper";
+import { OrderMapper } from "@/common/mappers/order.mapper";
 import { OrderDTO } from "@/modules/orders/dto/order.dto";
 import { Pagination } from "@/common/dto/pagination";
 import { Request } from "express";

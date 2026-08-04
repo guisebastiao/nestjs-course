@@ -8,7 +8,7 @@ import { ProductEntity } from "@/modules/products/product.entity";
 import { ProductRepository } from "@/modules/products/product.repository";
 import { UserEntity } from "@/modules/users/user.entity";
 import { StorageService } from "@/common/storage/storage.service";
-import { ProductMapper } from "@/modules/products/product.mapper";
+import { ProductMapper } from "@/common/mappers/product.mapper";
 import { ProductDTO } from "@/modules/products/dto/product.dto";
 import { LoggerService } from "@/common/logger/logger.service";
 import { STORAGE } from "@/common/storage/storage.constants";

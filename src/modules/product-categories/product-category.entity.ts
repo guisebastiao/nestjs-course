@@ -1,6 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { CategoryEntity } from "@/modules/categories/category.entity";
 import { ProductEntity } from "@/modules/products/product.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity("product_categories")
 @Unique(["productId", "categoryId"])
@@ -25,4 +34,10 @@ export class ProductCategoryEntity {
   })
   @JoinColumn({ name: "category_id" })
   category: CategoryEntity;
+
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: string;
+
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt: string;
 }

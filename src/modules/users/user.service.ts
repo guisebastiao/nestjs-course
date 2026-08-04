@@ -5,7 +5,7 @@ import { UserRepository } from "@/modules/users/user.repository";
 import { ConflictException, Injectable } from "@nestjs/common";
 import { BcryptService } from "@/common/bcrypt/bcrypt.service";
 import { LoggerService } from "@/common/logger/logger.service";
-import { UserMapper } from "@/modules/users/user.mapper";
+import { UserMapper } from "@/common/mappers/user.mapper";
 import { UserDTO } from "@/modules/users/dto/user.dto";
 import { Request } from "express";
 

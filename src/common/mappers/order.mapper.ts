@@ -7,27 +7,27 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class OrderMapper {
   toResponse(entity: OrderEntity): OrderDTO {
-    const orderDTO = new OrderDTO();
-    orderDTO.id = entity.id;
-    orderDTO.items = entity.items.map(({ id, quantity, unitPrice }) => ({
+    const dto = new OrderDTO();
+    dto.id = entity.id;
+    dto.items = entity.items.map(({ id, quantity, unitPrice }) => ({
       id,
       quantity,
       unitPrice,
     }));
 
-    return orderDTO;
+    return dto;
   }
 
   toEntity(dto: CreateOrderDTO): OrderEntity {
-    const orderEntity = new OrderEntity();
-    orderEntity.items = dto.items.map(({ productId, quantity }) => {
-      const orderItemEntity = new OrderItemEntity();
-      orderItemEntity.order = orderEntity;
-      orderItemEntity.product.id = productId;
-      orderItemEntity.quantity = quantity;
-      return orderItemEntity;
+    const entity = new OrderEntity();
+    entity.items = dto.items.map(({ productId, quantity }) => {
+      const itemEntity = new OrderItemEntity();
+      itemEntity.order = entity;
+      itemEntity.product.id = productId;
+      itemEntity.quantity = quantity;
+      return itemEntity;
     });
 
-    return orderEntity;
+    return entity;
   }
 }

@@ -4,7 +4,7 @@ import { UpdateRoleDTO } from "@/modules/roles/dto/update-role.dto";
 import { RoleRepository } from "@/modules/roles/role.repository";
 import { PaginationQuery } from "@/common/dto/pagination-query";
 import { LoggerService } from "@/common/logger/logger.service";
-import { RoleMapper } from "@/modules/roles/role.mapper";
+import { RoleMapper } from "@/common/mappers/role.mapper";
 import { RoleDTO } from "@/modules/roles/dto/role.dto";
 import { Pagination } from "@/common/dto/pagination";
 import { Request } from "express";

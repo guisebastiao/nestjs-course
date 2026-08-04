@@ -1,8 +1,9 @@
 import { RecoverPasswordEntity } from "@/modules/recover-passwords/recover-password.entity";
-import { RefreshEntity } from "@/modules/refreshes/refresh.entity";
+import { UserPictureEntity } from "@/modules/user-picture/user-picture.entity";
 import { UserRoleEntity } from "@/modules/user-roles/user-role.entity";
-import { ProductEntity } from "@/modules/products/product.entity";
 import { OrderEntity } from "@/modules/orders/entities/order.entity";
+import { RefreshEntity } from "@/modules/refreshes/refresh.entity";
+import { ProductEntity } from "@/modules/products/product.entity";
 import {
   Entity,
   Column,
@@ -11,6 +12,7 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   OneToMany,
+  OneToOne,
 } from "typeorm";
 
 @Entity({ name: "users" })
@@ -31,6 +33,11 @@ export class UserEntity {
     cascade: true,
   })
   roles: UserRoleEntity[];
+
+  @OneToOne(() => UserPictureEntity, (picture) => picture.user, {
+    cascade: true,
+  })
+  picture: UserPictureEntity;
 
   @OneToMany(() => RecoverPasswordEntity, (recoverPassword) => recoverPassword.user, {
     cascade: true,

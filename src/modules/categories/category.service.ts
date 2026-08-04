@@ -3,8 +3,8 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { CreateCategoryDTO } from "@/modules/categories/dto/create-category.dto";
 import { UpdateCategoryDTO } from "@/modules/categories/dto/update-category.dto";
 import { CategoryRepository } from "@/modules/categories/category.repository";
-import { CategoryMapper } from "@/modules/categories/category.mapper";
 import { CategoryDTO } from "@/modules/categories/dto/category.dto";
+import { CategoryMapper } from "@/common/mappers/category.mapper";
 import { LoggerService } from "@/common/logger/logger.service";
 import { Pagination } from "@/common/dto/pagination";
 import { toSlug } from "@/common/utils/to-slug";
