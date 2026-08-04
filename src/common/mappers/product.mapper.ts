@@ -1,6 +1,7 @@
 import { CreateProductDTO } from "@/modules/products/dto/create-product.dto";
 import { UpdateProductDTO } from "@/modules/products/dto/update-product.dto";
 import { ProductImageMapper } from "@/common/mappers/product-image.mapper";
+import { InventoryMapper } from "@/common/mappers/inventory.mapper";
 import { ProductEntity } from "@/modules/products/product.entity";
 import { CategoryMapper } from "@/common/mappers/category.mapper";
 import { ProductDTO } from "@/modules/products/dto/product.dto";
@@ -11,6 +12,7 @@ import { DeepPartial } from "typeorm";
 export class ProductMapper {
   constructor(
     private readonly productImageMapper: ProductImageMapper,
+    private readonly inventoryMapper: InventoryMapper,
     private readonly categoryMapper: CategoryMapper,
   ) {}
 
@@ -24,6 +26,7 @@ export class ProductMapper {
     productDTO.price = entity.price;
     productDTO.brand = entity.brand;
     productDTO.attributes = entity.attributes;
+    productDTO.inventory = this.inventoryMapper.toResponse(entity.inventory);
 
     productDTO.categories = entity.categories.map(({ category }) => {
       return this.categoryMapper.toResponse(category);

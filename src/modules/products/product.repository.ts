@@ -39,6 +39,7 @@ export class ProductRepository {
       where: { id },
       relations: {
         images: true,
+        inventory: true,
         categories: {
           category: true,
         },
@@ -165,6 +166,7 @@ export class ProductRepository {
       relations: {
         images: withRelations,
         attributes: withRelations,
+        inventory: withRelations,
       },
     });
 

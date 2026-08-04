@@ -24,6 +24,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from "@nestjs/common";
+import { InventoryEntity } from "@/modules/inventories/inventory.entity";
 
 const MAX_SKU_RETRIES = 10;
 
@@ -88,6 +89,11 @@ export class ProductService {
 
     productEntity.sku = sku;
 
+    const inventory = new InventoryEntity();
+    inventory.quantityAvailable = dto.inventory.quantityAvailable;
+    inventory.lowStockThreshold = dto.inventory.lowStockThreshold;
+    productEntity.inventory = inventory;
+
     const images = dto.images.map((image) => ({
       data: image.data,
       mimetype: image.mimetype,
@@ -141,6 +147,13 @@ export class ProductService {
 
     if (dto.name) {
       productToUpdate.slug = toSlug(dto.name);
+    }
+
+    if (dto.inventory && productToUpdate.inventory) {
+      const inventory = productToUpdate.inventory;
+      inventory.quantityAvailable = dto.inventory.quantityAvailable;
+      inventory.lowStockThreshold = dto.inventory.lowStockThreshold;
+      productToUpdate.inventory = inventory;
     }
 
     const deleteImageIds = dto.deleteImages ?? [];

@@ -9,6 +9,7 @@ import {
   IsArray,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
@@ -16,6 +17,7 @@ import {
   Min,
   ValidateNested,
 } from "class-validator";
+import { CreateInventoryDTO } from "@/modules/inventories/dto/create-inventory.dto";
 
 export class CreateProductDTO {
   @IsString()
@@ -37,6 +39,12 @@ export class CreateProductDTO {
   @IsNotEmpty()
   @MaxLength(500)
   brand: string;
+
+  @IsObject()
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => CreateInventoryDTO)
+  inventory: CreateInventoryDTO;
 
   @IsProductVariantAttributes()
   attributes: ProductAttributes[];

@@ -1,6 +1,7 @@
 import { ProductCategoryModule } from "@/modules/product-categories/product-category.module";
 import { RecoverPasswordModule } from "@/modules/recover-passwords/recover-password.module";
 import { UserPictureModule } from "@/modules/user-picture/user-picture.module";
+import { InventoriesModule } from "@/modules/inventories/inventory.module";
 import { UserRoleModule } from "@/modules/user-roles/user-role.module";
 import { CategoryModule } from "@/modules/categories/category.module";
 import { RefreshModule } from "@/modules/refreshes/refresh.module";
@@ -50,6 +51,7 @@ import { Module } from "@nestjs/common";
     RoleModule,
     UserRoleModule,
     UserPictureModule,
+    InventoriesModule,
   ],
   providers: [
     {

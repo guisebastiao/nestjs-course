@@ -2,6 +2,7 @@ import { ProductCategoryEntity } from "@/modules/product-categories/product-cate
 import { ProductImageEntity } from "@/modules/product-image/product-image.entity";
 import { OrderItemEntity } from "@/modules/orders/entities/order-item.entity";
 import type { ProductAttributes } from "@/common/types/product-attributes";
+import { InventoryEntity } from "@/modules/inventories/inventory.entity";
 import { UserEntity } from "@/modules/users/user.entity";
 import {
   Entity,
@@ -13,6 +14,7 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from "typeorm";
 
 @Entity({ name: "products" })
@@ -40,6 +42,11 @@ export class ProductEntity {
 
   @Column({ name: "brand", length: 500, nullable: false })
   brand: string;
+
+  @OneToOne(() => InventoryEntity, (inventory) => inventory.product, {
+    cascade: true,
+  })
+  inventory: InventoryEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.products, {
     onDelete: "RESTRICT",
