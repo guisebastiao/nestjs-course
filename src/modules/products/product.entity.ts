@@ -15,9 +15,12 @@ import {
   ManyToOne,
   JoinColumn,
   OneToOne,
+  Index,
 } from "typeorm";
 import { CartItemEntity } from "@/modules/cart-items/cart-item.entity";
 
+@Index("IDX_products_user_id", ["userId"])
+@Index("IDX_products_price", ["price"])
 @Entity({ name: "products" })
 export class ProductEntity {
   @PrimaryGeneratedColumn("uuid")

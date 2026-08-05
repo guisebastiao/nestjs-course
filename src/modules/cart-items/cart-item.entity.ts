@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -13,6 +14,7 @@ import {
 
 @Entity({ name: "cart_items" })
 @Unique(["cartId", "productId"])
+@Index("IDX_cart_items_product_id", ["productId"])
 export class CartItemEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;

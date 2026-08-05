@@ -3,12 +3,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
+@Index("IDX_recover_passwords_user_id", ["userId"])
 @Entity({ name: "recover_passwords" })
 export class RecoverPasswordEntity {
   @PrimaryGeneratedColumn("uuid")

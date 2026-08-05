@@ -2,6 +2,7 @@ import { ProductEntity } from "@/modules/products/product.entity";
 import {
   Entity,
   Column,
+  Index,
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
@@ -10,6 +11,7 @@ import {
   DeleteDateColumn,
 } from "typeorm";
 
+@Index("IDX_product_images_product_id", ["productId"])
 @Entity("product_images")
 export class ProductImageEntity {
   @PrimaryGeneratedColumn("uuid")

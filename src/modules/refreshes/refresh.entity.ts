@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToOne,
@@ -11,6 +12,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+@Index("IDX_refreshes_user_id", ["userId"])
 @Entity({ name: "refreshes" })
 export class RefreshEntity {
   @PrimaryColumn("uuid")

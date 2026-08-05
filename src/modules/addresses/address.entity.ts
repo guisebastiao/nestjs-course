@@ -4,12 +4,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
+@Index("IDX_addresses_user_id_is_default", ["userId", "isDefault"])
 @Entity({ name: "addresses" })
 export class AddressEntity {
   @PrimaryGeneratedColumn("uuid")

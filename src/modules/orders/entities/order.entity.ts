@@ -10,8 +10,10 @@ import {
   ManyToOne,
   JoinColumn,
   Column,
+  Index,
 } from "typeorm";
 
+@Index("IDX_orders_user_id", ["userId"])
 @Entity({ name: "orders" })
 export class OrderEntity {
   @PrimaryGeneratedColumn("uuid")

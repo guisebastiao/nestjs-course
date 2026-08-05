@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -13,6 +14,7 @@ import {
 
 @Entity("user_roles")
 @Unique(["user", "role"])
+@Index("IDX_user_roles_role_id", ["roleId"])
 export class UserRoleEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
