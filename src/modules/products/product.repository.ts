@@ -143,7 +143,7 @@ export class ProductRepository {
   }
 
   async delete(product: ProductEntity): Promise<void> {
-    await this.repository.softDelete({
+    await this.repository.softRemove({
       id: product.id,
     });
 

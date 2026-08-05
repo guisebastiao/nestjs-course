@@ -24,13 +24,13 @@ export class ProductCategoryEntity {
   categoryId: string;
 
   @ManyToOne(() => ProductEntity, (product) => product.categories, {
-    onDelete: "SET NULL",
+    onDelete: "CASCADE",
   })
   @JoinColumn({ name: "product_id" })
   product: ProductEntity;
 
   @ManyToOne(() => CategoryEntity, (category) => category.categories, {
-    onDelete: "SET NULL",
+    onDelete: "CASCADE",
   })
   @JoinColumn({ name: "category_id" })
   category: CategoryEntity;
