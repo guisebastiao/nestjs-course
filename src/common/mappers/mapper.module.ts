@@ -1,6 +1,7 @@
 import { ProductImageMapper } from "@/common/mappers/product-image.mapper";
 import { UserPictureMapper } from "@/common/mappers/user-picture.mapper";
 import { InventoryMapper } from "@/common/mappers/inventory.mapper";
+import { CartItemMapper } from "@/common/mappers/cart-item.mapper";
 import { CategoryMapper } from "@/common/mappers/category.mapper";
 import { ProductMapper } from "@/common/mappers/product.mapper";
 import { AddressMapper } from "@/common/mappers/address.mapper";
@@ -21,6 +22,7 @@ import { Global, Module } from "@nestjs/common";
     RoleMapper,
     UserMapper,
     InventoryMapper,
+    CartItemMapper,
   ],
   exports: [
     ProductImageMapper,
@@ -32,6 +34,7 @@ import { Global, Module } from "@nestjs/common";
     RoleMapper,
     UserMapper,
     InventoryMapper,
+    CartItemMapper,
   ],
 })
 export class MapperModule {}

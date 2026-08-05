@@ -3,7 +3,9 @@ import { UserPictureEntity } from "@/modules/user-picture/user-picture.entity";
 import { UserRoleEntity } from "@/modules/user-roles/user-role.entity";
 import { OrderEntity } from "@/modules/orders/entities/order.entity";
 import { RefreshEntity } from "@/modules/refreshes/refresh.entity";
+import { AddressEntity } from "@/modules/addresses/address.entity";
 import { ProductEntity } from "@/modules/products/product.entity";
+import { CartEntity } from "@/modules/carts/cart.entity";
 import {
   Entity,
   Column,
@@ -14,7 +16,6 @@ import {
   OneToMany,
   OneToOne,
 } from "typeorm";
-import { AddressEntity } from "@/modules/addresses/address.entity";
 
 @Entity({ name: "users" })
 export class UserEntity {
@@ -39,6 +40,11 @@ export class UserEntity {
     cascade: true,
   })
   picture: UserPictureEntity;
+
+  @OneToOne(() => CartEntity, (cart) => cart.user, {
+    cascade: true,
+  })
+  cart: CartEntity;
 
   @OneToMany(() => RecoverPasswordEntity, (recoverPassword) => recoverPassword.user, {
     cascade: true,

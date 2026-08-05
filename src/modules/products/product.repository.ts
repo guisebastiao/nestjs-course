@@ -75,6 +75,7 @@ export class ProductRepository {
       .createQueryBuilder("product")
       .where("product.deletedAt IS NULL")
       .leftJoinAndSelect("product.images", "image")
+      .leftJoinAndSelect("product.inventory", "inventory")
       .leftJoinAndSelect("product.categories", "productCategory")
       .leftJoinAndSelect("productCategory.category", "category")
       .take(params.limit)

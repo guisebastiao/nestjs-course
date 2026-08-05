@@ -16,6 +16,7 @@ import {
   JoinColumn,
   OneToOne,
 } from "typeorm";
+import { CartItemEntity } from "@/modules/cart-items/cart-item.entity";
 
 @Entity({ name: "products" })
 export class ProductEntity {
@@ -59,6 +60,11 @@ export class ProductEntity {
     orphanedRowAction: "delete",
   })
   images: ProductImageEntity[];
+
+  @OneToMany(() => CartItemEntity, (item) => item.product, {
+    cascade: false,
+  })
+  cartItems: CartItemEntity[];
 
   @Column({ name: "attributes", type: "json", nullable: true })
   attributes?: ProductAttributes[];
