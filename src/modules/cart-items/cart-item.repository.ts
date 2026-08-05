@@ -13,6 +13,27 @@ export class CartItemRepository {
     return await this.repository.save(entity);
   }
 
+  async findByProductId(productId): Promise<CartItemEntity | null> {
+    return await this.repository.findOneBy({ productId });
+  }
+
+  async findById(cartItemId: string): Promise<CartItemEntity | null> {
+    return await this.repository.findOne({
+      where: {
+        id: cartItemId,
+      },
+      relations: {
+        product: {
+          images: true,
+          inventory: true,
+          categories: {
+            category: true,
+          },
+        },
+      },
+    });
+  }
+
   async findItemsByUserId(
     userId: string,
     params: PaginationQuery,
@@ -27,6 +48,15 @@ export class CartItemRepository {
       },
       order: {
         createdAt: "ASC",
+      },
+      relations: {
+        product: {
+          images: true,
+          inventory: true,
+          categories: {
+            category: true,
+          },
+        },
       },
       skip,
       take: params.limit,
@@ -47,10 +77,11 @@ export class CartItemRepository {
   }
 
   async deleteAllByUserId(userId: string): Promise<void> {
-    await this.repository.delete({
-      cart: {
-        userId,
-      },
-    });
+    await this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(CartItemEntity)
+      .where(`cart_id IN (SELECT id FROM carts WHERE user_id = :userId)`, { userId })
+      .execute();
   }
 }

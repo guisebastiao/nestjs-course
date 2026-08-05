@@ -41,17 +41,30 @@ export class CartItemService {
       throw new NotFoundException("Product not found.");
     }
 
+    const cartItem = await this.cartItemRepository.findByProductId(product.id);
+
+    if (cartItem) {
+      cartItem.quantity = cartItem.quantity + dto.quantity;
+      const { id } = await this.cartItemRepository.save(cartItem);
+      const saved = await this.findCartItem(id);
+      return this.cartItemMapper.toResponse(saved);
+    }
+
     const entity = new CartItemEntity();
     entity.cart = cart;
     entity.product = product;
     entity.quantity = dto.quantity;
 
-    const saved = await this.cartItemRepository.save(entity);
+    const { id } = await this.cartItemRepository.save(entity);
+    const saved = await this.findCartItem(id);
 
     return this.cartItemMapper.toResponse(saved);
   }
 
-  async findAllItems(user: UserEntity, params: PaginationQuery) {
+  async findAllItems(
+    user: UserEntity,
+    params: PaginationQuery,
+  ): Promise<{ cartItems: CartItemDTO[]; pagination: Pagination }> {
     const [cartItems, total] = await this.cartItemRepository.findItemsByUserId(user.id, params);
 
     return {
@@ -60,7 +73,12 @@ export class CartItemService {
     };
   }
 
-  async update(req: Request, user: UserEntity, itemId: string, dto: UpdateCartItemDTO) {
+  async update(
+    req: Request,
+    user: UserEntity,
+    itemId: string,
+    dto: UpdateCartItemDTO,
+  ): Promise<CartItemDTO> {
     const entity = await this.cartItemRepository.findByIdAndUser(itemId, user.id);
 
     if (!entity) {
@@ -77,12 +95,13 @@ export class CartItemService {
 
     const updated = this.cartItemMapper.update(entity, dto);
 
-    const saved = await this.cartItemRepository.save(updated);
+    const { id } = await this.cartItemRepository.save(updated);
+    const saved = await this.findCartItem(id);
 
     return this.cartItemMapper.toResponse(saved);
   }
 
-  async removeCartItem(req: Request, user: UserEntity, itemId: string) {
+  async removeCartItem(req: Request, user: UserEntity, itemId: string): Promise<void> {
     const entity = await this.cartItemRepository.findByIdAndUser(itemId, user.id);
 
     if (!entity) {
@@ -100,8 +119,25 @@ export class CartItemService {
     await this.cartItemRepository.delete(entity);
   }
 
-  async removeAllItems(user: UserEntity) {
+  async removeAllItems(user: UserEntity): Promise<void> {
     await this.cartItemRepository.deleteAllByUserId(user.id);
+  }
+
+  private async findCartItem(cartItemId: string): Promise<CartItemEntity> {
+    const entity = await this.cartItemRepository.findById(cartItemId);
+
+    if (!entity) {
+      this.logger.warn({
+        message: "Cart item not found.",
+        class: CartItemService.name,
+        method: this.findCartItem.name,
+        data: { cartItemId },
+      });
+
+      throw new NotFoundException("Cart item not found.");
+    }
+
+    return entity;
   }
 
   private async findCartOrCreateByUser(user: UserEntity): Promise<CartEntity> {

@@ -47,10 +47,10 @@ export class CartItemsController {
     @Body() dto: UpdateCartItemDTO,
   ) {
     const data = await this.cartItemsService.update(req, user, cartItemId, dto);
-    SuccessResponse.of(data);
+    return SuccessResponse.of(data);
   }
 
-  @Delete("/:itemId")
+  @Delete("/:cartItemId")
   @HttpCode(HttpStatus.OK)
   async removeCartItem(
     @Req() req: Request,
@@ -58,13 +58,13 @@ export class CartItemsController {
     @Param("cartItemId") cartItemId: string,
   ) {
     await this.cartItemsService.removeCartItem(req, user, cartItemId);
-    SuccessResponse.of();
+    return SuccessResponse.of();
   }
 
   @Delete()
   @HttpCode(HttpStatus.OK)
   async removeAllItems(@AuthUser() user: UserEntity) {
     await this.cartItemsService.removeAllItems(user);
-    SuccessResponse.of();
+    return SuccessResponse.of();
   }
 }
