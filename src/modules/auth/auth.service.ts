@@ -1,5 +1,5 @@
-import { RefreshTokenService } from "@/modules/tokens/refresh-token.service";
 import { AccessTokenService } from "@/modules/tokens/access-token.service";
+import { RefreshService } from "@/modules/refreshes/refresh.service";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { UserRepository } from "@/modules/users/user.repository";
 import { LoggerService } from "@/common/logger/logger.service";
@@ -11,8 +11,8 @@ import { Request } from "express";
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly refreshTokenService: RefreshTokenService,
     private readonly accessTokenService: AccessTokenService,
+    private readonly refreshService: RefreshService,
     private readonly userRepository: UserRepository,
     private readonly bcryptService: BcryptService,
     private readonly logger: LoggerService,
@@ -37,7 +37,7 @@ export class AuthService {
       throw new UnauthorizedException("Invalid email or passwords.");
     }
 
-    const refreshToken = await this.refreshTokenService.create(user.id);
+    const refreshToken = await this.refreshService.create(user.id);
     const accessToken = await this.accessTokenService.create(user.id);
 
     this.logger.log({
@@ -66,7 +66,7 @@ export class AuthService {
       throw new UnauthorizedException("You are missing necessary cookie.");
     }
 
-    await this.refreshTokenService.revoke(req, refreshToken);
+    await this.refreshService.revoke(req, refreshToken);
 
     this.logger.log({
       message: "User logged out successfully.",
