@@ -14,6 +14,7 @@ import {
   OneToMany,
   OneToOne,
 } from "typeorm";
+import { AddressEntity } from "@/modules/addresses/address.entity";
 
 @Entity({ name: "users" })
 export class UserEntity {
@@ -48,6 +49,11 @@ export class UserEntity {
     cascade: true,
   })
   refreshes: RefreshEntity[];
+
+  @OneToMany(() => AddressEntity, (address) => address.user, {
+    cascade: true,
+  })
+  addresses: AddressEntity[];
 
   @OneToMany(() => ProductEntity, (product) => product.user, {
     cascade: false,

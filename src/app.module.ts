@@ -3,6 +3,7 @@ import { RecoverPasswordModule } from "@/modules/recover-passwords/recover-passw
 import { UserPictureModule } from "@/modules/user-picture/user-picture.module";
 import { InventoriesModule } from "@/modules/inventories/inventory.module";
 import { UserRoleModule } from "@/modules/user-roles/user-role.module";
+import { AddressModule } from "@/modules/addresses/address.module";
 import { CategoryModule } from "@/modules/categories/category.module";
 import { RefreshModule } from "@/modules/refreshes/refresh.module";
 import { ProductModule } from "@/modules/products/product.module";
@@ -52,6 +53,7 @@ import { Module } from "@nestjs/common";
     UserRoleModule,
     UserPictureModule,
     InventoriesModule,
+    AddressModule,
   ],
   providers: [
     {

@@ -17,26 +17,26 @@ export class ProductMapper {
   ) {}
 
   toResponse(entity: ProductEntity): ProductDTO {
-    const productDTO = new ProductDTO();
-    productDTO.id = entity.id;
-    productDTO.sku = entity.sku;
-    productDTO.slug = entity.slug;
-    productDTO.name = entity.name;
-    productDTO.description = entity.description;
-    productDTO.price = entity.price;
-    productDTO.brand = entity.brand;
-    productDTO.attributes = entity.attributes;
-    productDTO.inventory = this.inventoryMapper.toResponse(entity.inventory);
+    const dto = new ProductDTO();
+    dto.id = entity.id;
+    dto.sku = entity.sku;
+    dto.slug = entity.slug;
+    dto.name = entity.name;
+    dto.description = entity.description;
+    dto.price = entity.price;
+    dto.brand = entity.brand;
+    dto.attributes = entity.attributes;
+    dto.inventory = this.inventoryMapper.toResponse(entity.inventory);
 
-    productDTO.categories = entity.categories.map(({ category }) => {
+    dto.categories = entity.categories.map(({ category }) => {
       return this.categoryMapper.toResponse(category);
     });
 
-    productDTO.images = entity.images.map((imageEntity) => {
+    dto.images = entity.images.map((imageEntity) => {
       return this.productImageMapper.toResponse(imageEntity);
     });
 
-    return productDTO;
+    return dto;
   }
 
   toEntity(dto: CreateProductDTO): ProductEntity {
