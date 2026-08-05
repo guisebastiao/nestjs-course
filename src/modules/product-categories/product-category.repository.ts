@@ -13,11 +13,9 @@ export class ProductCategoryRepository {
     private readonly cacheService: CacheService,
   ) {}
 
-  async save(productCategory: DeepPartial<ProductCategoryEntity>): Promise<ProductCategoryEntity> {
-    const saved = await this.repository.save(productCategory);
-
+  async save(entity: DeepPartial<ProductCategoryEntity>): Promise<ProductCategoryEntity> {
+    const saved = await this.repository.save(entity);
     await this.invalidateProductCaches(saved.productId);
-
     return saved;
   }
 
@@ -28,9 +26,8 @@ export class ProductCategoryRepository {
     return await this.repository.findOneBy({ productId, categoryId });
   }
 
-  async delete(productCategory: ProductCategoryEntity): Promise<void> {
-    await this.repository.delete(productCategory.id);
-    await this.repository.delete(productCategory);
+  async delete(entity: ProductCategoryEntity): Promise<void> {
+    await this.repository.delete(entity.id);
   }
 
   private async invalidateProductCaches(productId: string): Promise<void> {

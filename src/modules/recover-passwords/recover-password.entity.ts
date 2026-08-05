@@ -2,7 +2,6 @@ import { UserEntity } from "@/modules/users/user.entity";
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -25,7 +24,7 @@ export class RecoverPasswordEntity {
   expiresAt: Date;
 
   @Column({ type: "timestamptz", name: "used_at", nullable: true })
-  usedAt: Date;
+  usedAt?: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.recoverPasswords, {
     onDelete: "CASCADE",
@@ -38,7 +37,4 @@ export class RecoverPasswordEntity {
 
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt: string;
-
-  @DeleteDateColumn({ name: "deleted_at" })
-  deletedAt: string;
 }

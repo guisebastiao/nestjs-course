@@ -1,7 +1,7 @@
 import { PaginationQuery } from "@/common/dto/pagination-query";
 import { toUpperCase } from "@/common/utils/to-upper-case";
 import { Transform, Type } from "class-transformer";
-import { toArray } from "@/common/utils/toArray";
+import { toArray } from "@/common/utils/to-array";
 import {
   IsArray,
   IsIn,

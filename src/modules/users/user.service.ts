@@ -1,11 +1,11 @@
 import { UpdateUserDTO } from "@/modules/users/dto/update-user.dto";
 import { CreateUserDTO } from "@/modules/users/dto/create-user.dto";
-import { UserEntity } from "@/modules/users/user.entity";
 import { UserRepository } from "@/modules/users/user.repository";
 import { ConflictException, Injectable } from "@nestjs/common";
 import { BcryptService } from "@/common/bcrypt/bcrypt.service";
 import { LoggerService } from "@/common/logger/logger.service";
 import { UserMapper } from "@/common/mappers/user.mapper";
+import { UserEntity } from "@/modules/users/user.entity";
 import { UserDTO } from "@/modules/users/dto/user.dto";
 import { Request } from "express";
 
@@ -35,10 +35,10 @@ export class UserService {
 
     const passwordHash = await this.bcryptService.hash(dto.password);
 
-    const userEntity = this.userMapper.toEntity(dto);
-    userEntity.password = passwordHash;
+    const entity = this.userMapper.toEntity(dto);
+    entity.password = passwordHash;
 
-    const newUser = await this.userRepository.save(userEntity);
+    const saved = await this.userRepository.save(entity);
 
     this.logger.log({
       message: "User created successfully.",
@@ -46,12 +46,12 @@ export class UserService {
       class: UserService.name,
       method: this.createUser.name,
       data: {
-        userId: newUser.id,
-        email: newUser.email,
+        userId: saved.id,
+        email: saved.email,
       },
     });
 
-    return this.userMapper.toResponse(newUser);
+    return this.userMapper.toResponse(saved);
   }
 
   me(user: UserEntity): UserDTO {
@@ -59,23 +59,39 @@ export class UserService {
   }
 
   async updateUser(user: UserEntity, dto: UpdateUserDTO): Promise<UserDTO> {
-    const userMapperUpdate = this.userMapper.update(user, dto);
-    const updatedUser = await this.userRepository.save(userMapperUpdate);
+    const updated = this.userMapper.update(user, dto);
+    const saved = await this.userRepository.save(updated);
 
     this.logger.log({
       message: "User updated successfully.",
       class: UserService.name,
       method: this.updateUser.name,
       data: {
-        userId: updatedUser.id,
+        userId: updated.id,
       },
     });
 
-    return this.userMapper.toResponse(updatedUser);
+    return this.userMapper.toResponse(saved);
   }
 
-  async deleteUser(user: UserEntity): Promise<void> {
-    await this.userRepository.delete(user);
+  async deleteUser(req: Request, user: UserEntity): Promise<void> {
+    const hasProducts = await this.userRepository.userHasProduct(user);
+
+    if (hasProducts) {
+      this.logger.warn({
+        message: "Account deletion blocked because the user has registered products.",
+        path: req.path,
+        class: UserEntity.name,
+        method: this.deleteUser.name,
+        data: { userId: user.id },
+      });
+
+      throw new ConflictException(
+        "Account cannot be deleted while products are still associated with it.",
+      );
+    }
+
+    await this.userRepository.softRemove(user);
 
     this.logger.log({
       message: "User deleted successfully.",

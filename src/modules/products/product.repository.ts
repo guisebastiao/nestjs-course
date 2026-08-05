@@ -14,16 +14,14 @@ export class ProductRepository {
     private readonly cacheService: CacheService,
   ) {}
 
-  async save(product: DeepPartial<ProductEntity>): Promise<ProductEntity> {
-    const saved = await this.repository.save(product);
-
+  async save(entity: DeepPartial<ProductEntity>): Promise<ProductEntity> {
+    const saved = await this.repository.save(entity);
     await this.invalidateProductCaches(saved.id);
-
     return saved;
   }
 
-  async saveAll(products: DeepPartial<ProductEntity>[]): Promise<ProductEntity[]> {
-    const saved = await this.repository.save(products);
+  async saveAll(entities: DeepPartial<ProductEntity>[]): Promise<ProductEntity[]> {
+    const saved = await this.repository.save(entities);
 
     await this.invalidateProductCaches(saved.map((product) => product.id));
 
@@ -142,12 +140,12 @@ export class ProductRepository {
     return [products, total];
   }
 
-  async delete(product: ProductEntity): Promise<void> {
+  async softRemove(entity: ProductEntity): Promise<void> {
     await this.repository.softRemove({
-      id: product.id,
+      id: entity.id,
     });
 
-    await this.invalidateProductCaches(product.id);
+    await this.invalidateProductCaches(entity.id);
   }
 
   private async getCachedProduct(

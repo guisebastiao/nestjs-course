@@ -39,12 +39,12 @@ export class UserPictureService {
       `profile-pictures/${nameReplaced + "_" + randomBytes(8).toString("hex")}`,
     );
 
-    const pictureEntity = new UserPictureEntity();
-    pictureEntity.userId = user.id;
-    pictureEntity.path = path;
-    pictureEntity.altText = nameReplaced;
+    const entity = new UserPictureEntity();
+    entity.userId = user.id;
+    entity.path = path;
+    entity.altText = nameReplaced;
 
-    const savedPicture = await this.userPictureRepository.save(pictureEntity);
+    const savedPicture = await this.userPictureRepository.save(entity);
 
     return this.profilePictureMapper.toResponse(savedPicture);
   }

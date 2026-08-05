@@ -2,7 +2,7 @@ import { RefreshEntity } from "@/modules/refreshes/refresh.entity";
 import { RefreshRepository } from "@/modules/refreshes/refresh.repository";
 import { BcryptService } from "@/common/bcrypt/bcrypt.service";
 import { LoggerService } from "@/common/logger/logger.service";
-import { TokenPayload } from "@/common/tokens/token.payload";
+import { TokenPayload } from "@/modules/tokens/token.payload";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { randomUUID } from "crypto";

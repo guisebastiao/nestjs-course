@@ -14,7 +14,7 @@ export class UserPictureEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "uuid", name: "user_id", nullable: false })
+  @Column({ type: "uuid", name: "user_id", nullable: false, unique: true })
   userId: string;
 
   @Column({ name: "alt_text", length: 150, nullable: true })

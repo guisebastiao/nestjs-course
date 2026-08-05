@@ -29,7 +29,7 @@ export class RoleRepository {
   async existsUserIntoRole(roleId: string): Promise<boolean> {
     return await this.repository.existsBy({
       id: roleId,
-      roles: {
+      userRoles: {
         role: {
           id: roleId,
         },
@@ -48,7 +48,7 @@ export class RoleRepository {
   async findAllByUser(userId: string): Promise<RoleEntity[]> {
     return await this.repository.find({
       where: {
-        roles: {
+        userRoles: {
           user: {
             id: userId,
           },

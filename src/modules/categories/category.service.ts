@@ -46,11 +46,7 @@ export class CategoryService {
   async findAll(
     params: CategoryQueryParams,
   ): Promise<{ categories: CategoryDTO[]; pagination: Pagination }> {
-    const [categories, total] = await this.categoryRepository.findAll(
-      params.page,
-      params.limit,
-      params.order,
-    );
+    const [categories, total] = await this.categoryRepository.findAll(params);
 
     return {
       categories: categories.map((category) => this.categoryMapper.toResponse(category)),
@@ -73,7 +69,7 @@ export class CategoryService {
       throw new NotFoundException("Category not found.");
     }
 
-    const data = this.categoryMapper.update(category, dto);
+    const updated = this.categoryMapper.update(category, dto);
 
     if (dto.name) {
       const slug = toSlug(dto.name);
@@ -92,12 +88,12 @@ export class CategoryService {
         throw new ConflictException("Category already exists.");
       }
 
-      data.slug = slug;
+      updated.slug = slug;
     }
 
-    const updated = await this.categoryRepository.save(data);
+    const saved = await this.categoryRepository.save(updated);
 
-    return this.categoryMapper.toResponse(updated);
+    return this.categoryMapper.toResponse(saved);
   }
 
   async delete(req: Request, categoryId: string): Promise<void> {
@@ -115,6 +111,6 @@ export class CategoryService {
       throw new NotFoundException("Category not found.");
     }
 
-    await this.categoryRepository.delete(category);
+    await this.categoryRepository.softRemove(category);
   }
 }

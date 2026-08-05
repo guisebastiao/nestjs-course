@@ -20,19 +20,22 @@ export class RefreshEntity {
   userId: string;
 
   @Column({ type: "uuid", name: "replaced_by_id", nullable: true })
-  replacedById: string;
+  replacedById?: string;
 
-  @Column({ name: "token_hash", nullable: false, unique: true })
+  @Column({ name: "token_hash", length: 255, nullable: false, unique: true })
   tokenHash: string;
 
   @Column({ type: "timestamptz", name: "revoked_at", nullable: true })
-  revokedAt: Date;
+  revokedAt?: Date;
+
+  @OneToOne(() => RefreshEntity, (refresh) => refresh.replacedBy)
+  replacement?: RefreshEntity;
 
   @OneToOne(() => RefreshEntity, (refresh) => refresh.replacedBy, {
     onDelete: "SET NULL",
   })
   @JoinColumn({ name: "replaced_by_id" })
-  replacedBy: RefreshEntity;
+  replacedBy?: RefreshEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.refreshes, {
     onDelete: "CASCADE",

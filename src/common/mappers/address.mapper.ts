@@ -32,7 +32,7 @@ export class AddressMapper {
     entity.state = dto.state;
     entity.country = dto.country;
     entity.complement = dto.complement;
-    entity.isDefault = dto.isDefault ?? false;
+    entity.isDefault = dto.isDefault;
     return entity;
   }
 

@@ -1,6 +1,7 @@
+import { CategoryQueryParams } from "@/modules/categories/dto/category-query-params";
 import { CategoryEntity } from "@/modules/categories/category.entity";
-import { InjectRepository } from "@nestjs/typeorm";
 import { DeepPartial, In, Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -10,8 +11,8 @@ export class CategoryRepository {
     private readonly repository: Repository<CategoryEntity>,
   ) {}
 
-  async save(category: DeepPartial<CategoryEntity>): Promise<CategoryEntity> {
-    return await this.repository.save(category);
+  async save(entity: DeepPartial<CategoryEntity>): Promise<CategoryEntity> {
+    return await this.repository.save(entity);
   }
 
   async findById(categoryId: string): Promise<CategoryEntity | null> {
@@ -30,23 +31,19 @@ export class CategoryRepository {
     });
   }
 
-  async findAll(
-    page: number,
-    limit: number,
-    order: "ASC" | "DESC",
-  ): Promise<[CategoryEntity[], number]> {
-    const skip = (page - 1) * limit;
+  async findAll(params: CategoryQueryParams): Promise<[CategoryEntity[], number]> {
+    const skip = (params.page - 1) * params.limit;
 
     return await this.repository.findAndCount({
-      take: limit,
+      take: params.limit,
       skip,
       order: {
-        name: order,
+        name: params.order,
       },
     });
   }
 
-  async delete(category: CategoryEntity): Promise<void> {
-    await this.repository.delete(category.id);
+  async softRemove(category: CategoryEntity): Promise<void> {
+    await this.repository.softRemove(category);
   }
 }

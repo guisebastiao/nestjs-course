@@ -46,8 +46,8 @@ export class UserController {
 
   @Delete()
   @HttpCode(HttpStatus.OK)
-  async deleteUser(@AuthUser() user: UserEntity) {
-    await this.userService.deleteUser(user);
+  async deleteUser(@Req() req: Request, @AuthUser() user: UserEntity) {
+    await this.userService.deleteUser(req, user);
     return SuccessResponse.of();
   }
 }

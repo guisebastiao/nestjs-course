@@ -1,3 +1,4 @@
+import { PaginationQuery } from "@/common/dto/pagination-query";
 import { CacheService } from "@/common/cache/app-cache.service";
 import { CACHE } from "@/common/cache/app-cache.constants";
 import { UserEntity } from "@/modules/users/user.entity";
@@ -13,33 +14,49 @@ export class UserRepository {
     private readonly cacheService: CacheService,
   ) {}
 
-  async save(user: DeepPartial<UserEntity>): Promise<UserEntity> {
-    const saved = await this.repository.save(user);
-
+  async save(entity: DeepPartial<UserEntity>): Promise<UserEntity> {
+    const saved = await this.repository.save(entity);
     await this.invalidateUserCaches(saved.id);
-
     return saved;
   }
 
+  async userHasProduct(entity: UserEntity): Promise<boolean> {
+    const count = await this.repository
+      .createQueryBuilder("user")
+      .innerJoin("user.products", "product")
+      .where("user.id = :userId", { userId: entity.id })
+      .getCount();
+
+    return count > 0;
+  }
+
   async findById(id: string): Promise<UserEntity | null> {
-    return await this.getCachedUserOrDatabase(id);
+    return await this.getCachedUserOrFromDatabase(id);
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
     return await this.repository.findOneBy({ email });
   }
 
-  async findAllUsers(skip: number, take: number): Promise<[UserEntity[], number]> {
-    return await this.repository.findAndCount({ skip, take });
-  }
+  async findAllUsers(params: PaginationQuery): Promise<[UserEntity[], number]> {
+    const skip = (params.page - 1) * params.limit;
 
-  async delete(user: UserEntity): Promise<void> {
-    await this.repository.softDelete({
-      id: user.id,
+    return await this.repository.findAndCount({
+      skip,
+      take: params.limit,
+      order: {
+        name: "ASC",
+      },
     });
   }
 
-  private async getCachedUserOrDatabase(id: string): Promise<UserEntity | null> {
+  async softRemove(entity: UserEntity): Promise<void> {
+    await this.repository.softRemove({
+      id: entity.id,
+    });
+  }
+
+  private async getCachedUserOrFromDatabase(id: string): Promise<UserEntity | null> {
     const key = `${CACHE.USER.USER_CACHE_PREFIX}${id}`;
 
     const cached = await this.cacheService.get<UserEntity>(key);

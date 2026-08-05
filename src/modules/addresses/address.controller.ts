@@ -25,23 +25,23 @@ import {
 export class AddressController {
   constructor(private readonly addressesService: AddressService) {}
 
-  @HttpCode(HttpStatus.CREATED)
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async create(@AuthUser() user: UserEntity, @Body() dto: CreateAddressDTO) {
     const data = await this.addressesService.create(user, dto);
     return SuccessResponse.of(data);
   }
 
-  @HttpCode(HttpStatus.OK)
   @Get()
+  @HttpCode(HttpStatus.OK)
   async findAll(@AuthUser() user: UserEntity, @Query() params: AddressQueryParams) {
     const { addresses, pagination } = await this.addressesService.findAll(user, params);
     const data = ListResponse.of(addresses, pagination);
     return SuccessResponse.of(data);
   }
 
-  @HttpCode(HttpStatus.OK)
   @Patch("/:addressId")
+  @HttpCode(HttpStatus.OK)
   async update(
     @Req() req: Request,
     @AuthUser() user: UserEntity,
@@ -52,8 +52,8 @@ export class AddressController {
     return SuccessResponse.of(data);
   }
 
-  @HttpCode(HttpStatus.OK)
   @Delete("/:addressId")
+  @HttpCode(HttpStatus.OK)
   async delete(
     @Req() req: Request,
     @AuthUser() user: UserEntity,

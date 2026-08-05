@@ -15,8 +15,8 @@ export class InventoryEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ name: "product_id", type: "uuid", nullable: false })
-  product_id: string;
+  @Column({ name: "product_id", type: "uuid", unique: true, nullable: false })
+  productId: string;
 
   @Column({ name: "quantity_available", type: "int", nullable: false })
   quantityAvailable: number;
@@ -31,11 +31,11 @@ export class InventoryEntity {
   product: ProductEntity;
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: string;
+  updatedAt: Date;
 
   @DeleteDateColumn({ name: "deleted_at" })
-  deletedAt: string;
+  deletedAt: Date;
 }

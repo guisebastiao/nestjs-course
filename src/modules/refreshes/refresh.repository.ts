@@ -10,8 +10,8 @@ export class RefreshRepository {
     private readonly repository: Repository<RefreshEntity>,
   ) {}
 
-  async save(refreshEntity: DeepPartial<RefreshEntity>): Promise<RefreshEntity> {
-    return await this.repository.save(refreshEntity);
+  async save(entity: DeepPartial<RefreshEntity>): Promise<RefreshEntity> {
+    return await this.repository.save(entity);
   }
 
   async findById(id: string): Promise<RefreshEntity | null> {

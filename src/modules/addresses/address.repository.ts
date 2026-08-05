@@ -2,7 +2,9 @@ import { AddressQueryParams } from "@/modules/addresses/dto/address-query-params
 import { AddressEntity } from "@/modules/addresses/address.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeepPartial, Repository } from "typeorm";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class AddressRepository {
   constructor(
     @InjectRepository(AddressEntity)
@@ -39,7 +41,7 @@ export class AddressRepository {
     });
   }
 
-  async delete(entity: AddressEntity): Promise<void> {
-    await this.repository.delete(entity.id);
+  async softRemove(entity: AddressEntity): Promise<void> {
+    await this.repository.softRemove(entity);
   }
 }

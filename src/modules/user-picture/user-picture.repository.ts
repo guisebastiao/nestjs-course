@@ -1,9 +1,9 @@
 import { UserPictureEntity } from "@/modules/user-picture/user-picture.entity";
 import { CacheService } from "@/common/cache/app-cache.service";
+import { CACHE } from "@/common/cache/app-cache.constants";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
-import { CACHE } from "@/common/cache/app-cache.constants";
 
 @Injectable()
 export class UserPictureRepository {
@@ -13,9 +13,9 @@ export class UserPictureRepository {
     private readonly cacheService: CacheService,
   ) {}
 
-  async save(picture: UserPictureEntity): Promise<UserPictureEntity> {
-    const saved = await this.repository.save(picture);
-    await this.invalidateUserCaches(picture.userId);
+  async save(entity: UserPictureEntity): Promise<UserPictureEntity> {
+    const saved = await this.repository.save(entity);
+    await this.invalidateUserCaches(entity.userId);
     return saved;
   }
 
@@ -23,9 +23,9 @@ export class UserPictureRepository {
     return await this.repository.findOneBy({ userId });
   }
 
-  async delete(picture: UserPictureEntity): Promise<void> {
-    await this.repository.delete(picture.id);
-    await this.invalidateUserCaches(picture.userId);
+  async delete(entity: UserPictureEntity): Promise<void> {
+    await this.repository.delete(entity.id);
+    await this.invalidateUserCaches(entity.userId);
   }
 
   private async invalidateUserCaches(id?: string | string[]): Promise<void> {

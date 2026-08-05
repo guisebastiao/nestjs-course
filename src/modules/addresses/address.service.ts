@@ -89,7 +89,7 @@ export class AddressService {
       throw new NotFoundException("Address not found.");
     }
 
-    await this.addressRepository.delete(entity);
+    await this.addressRepository.softRemove(entity);
   }
 
   async deselectIsDefaults(userId: string): Promise<void> {

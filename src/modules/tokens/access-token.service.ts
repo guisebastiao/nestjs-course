@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { UserEntity } from "@/modules/users/user.entity";
 import { UserRepository } from "@/modules/users/user.repository";
 import { LoggerService } from "@/common/logger/logger.service";
-import { TokenPayload } from "@/common/tokens/token.payload";
+import { TokenPayload } from "@/modules/tokens/token.payload";
 import { JwtService, TokenExpiredError } from "@nestjs/jwt";
+import { UserEntity } from "@/modules/users/user.entity";
 import { ConfigService } from "@nestjs/config";
 import { Request } from "express";
 

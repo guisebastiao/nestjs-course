@@ -1,5 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "@/modules/users/user.entity";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity({ name: "addresses" })
 export class AddressEntity {
@@ -39,5 +48,15 @@ export class AddressEntity {
   @ManyToOne(() => UserEntity, (user) => user.addresses, {
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "user_id" })
   user: UserEntity;
+
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: "deleted_at" })
+  deletedAt?: Date;
 }

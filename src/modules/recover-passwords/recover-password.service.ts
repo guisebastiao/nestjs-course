@@ -1,7 +1,7 @@
 import { CreateRecoverPasswordDTO } from "@/modules/recover-passwords/dto/create-recover-password.dto";
-import { RecoverPasswordEntity } from "@/modules/recover-passwords/recover-password.entity";
 import { RecoverPasswordRepository } from "@/modules/recover-passwords/recover-password.repository";
 import { ConflictException, GoneException, Injectable, NotFoundException } from "@nestjs/common";
+import { RecoverPasswordEntity } from "@/modules/recover-passwords/recover-password.entity";
 import { ResetPasswordDTO } from "@/modules/recover-passwords/dto/reset-password.dto";
 import { MailQueueService } from "@/common/mail-queue/mail-queue.service";
 import { UserRepository } from "@/modules/users/user.repository";
@@ -14,8 +14,8 @@ import { Request } from "express";
 export class RecoverPasswordService {
   constructor(
     private readonly recoverPasswordRepository: RecoverPasswordRepository,
-    private readonly userRepository: UserRepository,
     private readonly mailQueueService: MailQueueService,
+    private readonly userRepository: UserRepository,
     private readonly bcryptService: BcryptService,
     private readonly logger: LoggerService,
   ) {}
@@ -50,12 +50,12 @@ export class RecoverPasswordService {
     const expiresAt = new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + 30);
 
-    const recoverPasswordEntity = new RecoverPasswordEntity();
-    recoverPasswordEntity.userId = user.id;
-    recoverPasswordEntity.token = randomUUID();
-    recoverPasswordEntity.expiresAt = expiresAt;
+    const entity = new RecoverPasswordEntity();
+    entity.userId = user.id;
+    entity.token = randomUUID();
+    entity.expiresAt = expiresAt;
 
-    const { token } = await this.recoverPasswordRepository.save(recoverPasswordEntity);
+    const { token } = await this.recoverPasswordRepository.save(entity);
 
     this.mailQueueService.sendRecoverPasswordMail(user.email, token, user.name);
   }

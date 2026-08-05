@@ -7,6 +7,7 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from "typeorm";
 
 @Entity("product_images")
@@ -21,7 +22,7 @@ export class ProductImageEntity {
   position: number;
 
   @Column({ name: "alt_text", length: 150, nullable: true })
-  altText: string;
+  altText?: string;
 
   @Column({ name: "path", length: 255, nullable: false })
   path: string;
@@ -33,8 +34,11 @@ export class ProductImageEntity {
   product: ProductEntity;
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: string;
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: "deleted_at" })
+  deletedAt: Date;
 }

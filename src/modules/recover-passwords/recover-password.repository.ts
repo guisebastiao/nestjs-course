@@ -10,8 +10,8 @@ export class RecoverPasswordRepository {
     private readonly repository: Repository<RecoverPasswordEntity>,
   ) {}
 
-  async save(recoverPassword: DeepPartial<RecoverPasswordEntity>): Promise<RecoverPasswordEntity> {
-    return await this.repository.save(recoverPassword);
+  async save(entity: DeepPartial<RecoverPasswordEntity>): Promise<RecoverPasswordEntity> {
+    return await this.repository.save(entity);
   }
 
   async findByToken(token: string): Promise<RecoverPasswordEntity | null> {

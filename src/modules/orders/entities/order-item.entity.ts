@@ -7,7 +7,7 @@ export class OrderItemEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "uuid", name: "product_id", nullable: false })
+  @Column({ type: "uuid", name: "product_id", nullable: true })
   productId: string;
 
   @Column({ type: "uuid", name: "order_id", nullable: false })
@@ -26,7 +26,7 @@ export class OrderItemEntity {
   order: OrderEntity;
 
   @ManyToOne(() => ProductEntity, (product) => product.items, {
-    onDelete: "RESTRICT",
+    onDelete: "SET NULL",
   })
   @JoinColumn({ name: "product_id" })
   product: ProductEntity;

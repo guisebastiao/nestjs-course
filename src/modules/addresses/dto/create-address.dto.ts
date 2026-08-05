@@ -1,5 +1,4 @@
 import { IsBoolean, IsNotEmpty, IsOptional, IsString, Matches, MaxLength } from "class-validator";
-import { Type } from "class-transformer";
 
 export class CreateAddressDTO {
   @IsString()
@@ -46,6 +45,5 @@ export class CreateAddressDTO {
 
   @IsBoolean()
   @IsOptional()
-  @Type(() => Boolean)
-  isDefault?: boolean;
+  isDefault: boolean = false;
 }

@@ -62,11 +62,11 @@ export class UserRoleService {
       throw new ConflictException("This user already has this role.");
     }
 
-    const userRole = new UserRoleEntity();
-    userRole.user = user;
-    userRole.role = role;
+    const entity = new UserRoleEntity();
+    entity.user = user;
+    entity.role = role;
 
-    await this.userRoleRepository.save(userRole);
+    await this.userRoleRepository.save(entity);
   }
 
   async findByUser(req: Request, userId: string): Promise<RoleDTO[]> {

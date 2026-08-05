@@ -1,4 +1,4 @@
-import { AccessTokenService } from "@/common/tokens/access-token.service";
+import { AccessTokenService } from "@/modules/tokens/access-token.service";
 import { HAS_ROLES_KEY } from "@/common/decorators/has-roles.decorator";
 import { UserRoleEntity } from "@/modules/user-roles/user-role.entity";
 import { DefaultRoleName } from "@/common/types/default-role-names";

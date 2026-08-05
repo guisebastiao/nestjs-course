@@ -16,10 +16,11 @@ export class CartEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ name: "user_id", type: "uuid", nullable: false })
+  @Column({ name: "user_id", type: "uuid", nullable: false, unique: true })
   userId: string;
 
   @OneToOne(() => UserEntity, (user) => user.cart, {
+    orphanedRowAction: "delete",
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "user_id" })
@@ -31,8 +32,8 @@ export class CartEntity {
   items: CartItemEntity[];
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: string;
+  updatedAt: Date;
 }

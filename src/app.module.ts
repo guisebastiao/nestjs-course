@@ -15,7 +15,6 @@ import { MapperModule } from "@/common/mappers/mapper.module";
 import { LoggerModule } from "@/common/logger/logger.module";
 import { DatabaseConfig } from "@/database/database.config";
 import { OrderModule } from "@/modules/orders/order.module";
-import { TokenModule } from "@/common/tokens/token.module";
 import { UserModule } from "@/modules/users/user.module";
 import { CartModule } from "@/modules/carts/cart.module";
 import { RoleModule } from "@/modules/roles/role.module";
@@ -49,7 +48,6 @@ import { Module } from "@nestjs/common";
     OrderModule,
     MailModule,
     RefreshModule,
-    TokenModule,
     CookieModule,
     RoleModule,
     UserRoleModule,

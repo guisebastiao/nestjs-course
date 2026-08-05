@@ -32,9 +32,9 @@ export class RoleService {
       throw new ConflictException("Role already exists.");
     }
 
-    const role = this.roleMapper.toEntity(dto);
+    const entity = this.roleMapper.toEntity(dto);
 
-    const saved = await this.roleRepository.save(role);
+    const saved = await this.roleRepository.save(entity);
 
     return this.roleMapper.toResponse(saved);
   }
@@ -66,9 +66,9 @@ export class RoleService {
       throw new NotFoundException("Role not found.");
     }
 
-    const updatedRole = this.roleMapper.update(role, dto);
+    const updated = this.roleMapper.update(role, dto);
 
-    const saved = await this.roleRepository.save(updatedRole);
+    const saved = await this.roleRepository.save(updated);
 
     return this.roleMapper.toResponse(saved);
   }
@@ -92,7 +92,7 @@ export class RoleService {
 
     if (existsUserIntoRole) {
       this.logger.warn({
-        message: "Delete role exists users.",
+        message: "Role deletion blocked because it is assigned to one or more users.",
         path: req.path,
         class: RoleService.name,
         method: this.delete.name,

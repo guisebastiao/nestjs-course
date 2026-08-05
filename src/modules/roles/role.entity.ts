@@ -20,8 +20,10 @@ export class RoleEntity {
   @Column({ type: "text", name: "description", nullable: true })
   description?: string;
 
-  @OneToMany(() => UserRoleEntity, (userRole) => userRole.role)
-  roles: UserRoleEntity[];
+  @OneToMany(() => UserRoleEntity, (userRole) => userRole.role, {
+    cascade: false,
+  })
+  userRoles: UserRoleEntity[];
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: string;

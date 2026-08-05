@@ -1,5 +1,5 @@
-import { RefreshTokenService } from "@/common/tokens/refresh-token.service";
-import { AccessTokenService } from "@/common/tokens/access-token.service";
+import { RefreshTokenService } from "@/modules/tokens/refresh-token.service";
+import { AccessTokenService } from "@/modules/tokens/access-token.service";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { UserRepository } from "@/modules/users/user.repository";
 import { LoggerService } from "@/common/logger/logger.service";

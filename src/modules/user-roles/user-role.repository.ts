@@ -10,8 +10,8 @@ export class UserRoleRepository {
     private readonly repository: Repository<UserRoleEntity>,
   ) {}
 
-  async save(userRole: DeepPartial<UserRoleEntity>): Promise<UserRoleEntity> {
-    return await this.repository.save(userRole);
+  async save(entity: DeepPartial<UserRoleEntity>): Promise<UserRoleEntity> {
+    return await this.repository.save(entity);
   }
 
   async findByUserAndRole(userId: string, roleId: string): Promise<UserRoleEntity | null> {
@@ -27,7 +27,7 @@ export class UserRoleRepository {
     });
   }
 
-  async delete(userRole: UserRoleEntity): Promise<void> {
-    await this.repository.delete(userRole.id);
+  async delete(entity: UserRoleEntity): Promise<void> {
+    await this.repository.delete(entity.id);
   }
 }

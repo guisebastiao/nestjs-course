@@ -1,6 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { RoleEntity } from "@/modules/roles/role.entity";
 import { UserEntity } from "@/modules/users/user.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity("user_roles")
 @Unique(["user", "role"])
@@ -20,9 +29,15 @@ export class UserRoleEntity {
   @JoinColumn({ name: "user_id" })
   user: UserEntity;
 
-  @ManyToOne(() => RoleEntity, (role) => role.roles, {
-    onDelete: "CASCADE",
+  @ManyToOne(() => RoleEntity, (role) => role.userRoles, {
+    onDelete: "RESTRICT",
   })
   @JoinColumn({ name: "role_id" })
   role: RoleEntity;
+
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt: Date;
 }

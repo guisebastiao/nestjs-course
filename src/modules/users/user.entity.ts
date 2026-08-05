@@ -32,16 +32,19 @@ export class UserEntity {
   password: string;
 
   @OneToMany(() => UserRoleEntity, (userRole) => userRole.user, {
+    orphanedRowAction: "delete",
     cascade: true,
   })
   roles: UserRoleEntity[];
 
   @OneToOne(() => UserPictureEntity, (picture) => picture.user, {
+    orphanedRowAction: "delete",
     cascade: true,
   })
   picture: UserPictureEntity;
 
   @OneToOne(() => CartEntity, (cart) => cart.user, {
+    orphanedRowAction: "delete",
     cascade: true,
   })
   cart: CartEntity;
@@ -51,12 +54,13 @@ export class UserEntity {
   })
   recoverPasswords: RecoverPasswordEntity[];
 
-  @OneToMany(() => ProductEntity, (refresh) => refresh.user, {
+  @OneToMany(() => RefreshEntity, (refresh) => refresh.user, {
     cascade: true,
   })
   refreshes: RefreshEntity[];
 
   @OneToMany(() => AddressEntity, (address) => address.user, {
+    orphanedRowAction: "delete",
     cascade: true,
   })
   addresses: AddressEntity[];

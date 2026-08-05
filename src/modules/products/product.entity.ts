@@ -45,6 +45,7 @@ export class ProductEntity {
   brand: string;
 
   @OneToOne(() => InventoryEntity, (inventory) => inventory.product, {
+    orphanedRowAction: "delete",
     cascade: true,
   })
   inventory: InventoryEntity;
@@ -56,8 +57,8 @@ export class ProductEntity {
   user: UserEntity;
 
   @OneToMany(() => ProductImageEntity, (productImageEntity) => productImageEntity.product, {
-    cascade: true,
     orphanedRowAction: "delete",
+    cascade: true,
   })
   images: ProductImageEntity[];
 
@@ -70,21 +71,22 @@ export class ProductEntity {
   attributes?: ProductAttributes[];
 
   @OneToMany(() => ProductCategoryEntity, (category) => category.product, {
+    orphanedRowAction: "delete",
     cascade: true,
   })
   categories: ProductCategoryEntity[];
 
   @OneToMany(() => OrderItemEntity, (item) => item.product, {
-    cascade: true,
+    cascade: false,
   })
   items: OrderItemEntity[];
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: string;
+  updatedAt: Date;
 
   @DeleteDateColumn({ name: "deleted_at" })
-  deletedAt: string;
+  deletedAt: Date;
 }

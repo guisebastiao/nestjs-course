@@ -7,10 +7,12 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from "typeorm";
 
 @Entity({ name: "cart_items" })
+@Unique(["cartId", "productId"])
 export class CartItemEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -37,8 +39,8 @@ export class CartItemEntity {
   product: ProductEntity;
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: string;
+  updatedAt: Date;
 }

@@ -29,15 +29,15 @@ export class ProductCategoryEntity {
   @JoinColumn({ name: "product_id" })
   product: ProductEntity;
 
-  @ManyToOne(() => CategoryEntity, (category) => category.categories, {
+  @ManyToOne(() => CategoryEntity, (category) => category.productCategories, {
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "category_id" })
   category: CategoryEntity;
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: string;
+  updatedAt: Date;
 }
